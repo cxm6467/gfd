@@ -63,7 +63,7 @@ export const HomePage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8 md:mb-16 px-4">
               <Button 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/profile')}
                 size="lg"
                 fullWidth={window.innerWidth < 640}
               >
@@ -168,7 +168,7 @@ export const HomePage: React.FC = () => {
             the importance of shared values and lifestyle choices.
           </p>
           <Button 
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/profile')}
             variant="secondary"
             size="lg"
           >
