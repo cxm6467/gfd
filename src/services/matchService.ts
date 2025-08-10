@@ -1,0 +1,146 @@
+import { User, Match } from '../types';
+
+export interface MatchData {
+  id: string;
+  userId: string;
+  likedUserId: string;
+  isMatch: boolean; // true if both users liked each other
+  createdAt: Date;
+}
+
+export class MatchService {
+  private static instance: MatchService;
+  
+  static getInstance(): MatchService {
+    if (!MatchService.instance) {
+      MatchService.instance = new MatchService();
+    }
+    return MatchService.instance;
+  }
+
+  // Add a like and check for mutual match
+  async addLike(currentUserId: string, likedProfile: User): Promise<{ isMatch: boolean; matchId?: string }> {
+    console.log('Adding like:', currentUserId, 'likes', likedProfile.id);
+    
+    // Get existing likes from localStorage
+    const existingLikes = this.getLikes();
+    
+    // Create new like
+    const newLike: MatchData = {
+      id: `like_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      userId: currentUserId,
+      likedUserId: likedProfile.id.toString(),
+      isMatch: false,
+      createdAt: new Date()
+    };
+
+    // Check if the other user already liked us (mutual match)
+    const mutualLike = existingLikes.find(like => 
+      like.userId === likedProfile.id.toString() && 
+      like.likedUserId === currentUserId
+    );
+
+    if (mutualLike) {
+      // It's a match! Update both likes
+      newLike.isMatch = true;
+      mutualLike.isMatch = true;
+      
+      // Save updated likes
+      const updatedLikes = existingLikes.map(like => 
+        like.id === mutualLike.id ? mutualLike : like
+      );
+      updatedLikes.push(newLike);
+      this.saveLikes(updatedLikes);
+
+      // Add to matches
+      await this.addMatch(currentUserId, likedProfile);
+      
+      return { isMatch: true, matchId: newLike.id };
+    } else {
+      // Just a like, not a match yet
+      existingLikes.push(newLike);
+      this.saveLikes(existingLikes);
+      
+      return { isMatch: false };
+    }
+  }
+
+  // Get all matches for current user
+  async getMatches(userId: string): Promise<Match[]> {
+    const likes = this.getLikes();
+    const matches = this.getStoredMatches();
+    
+    // Convert stored matches to Match format
+    return matches
+      .filter(match => match.participants.includes(userId))
+      .map(match => {
+        const otherUserId = match.participants.find(id => id !== userId);
+        const otherUser = this.findUserById(otherUserId!);
+        
+        return {
+          id: parseInt(match.id.replace('match_', '')),
+          name: otherUser?.name || 'Unknown',
+          lastMessage: match.lastMessage || "You matched! Say hello 👋",
+          time: this.formatTime(match.createdAt),
+          emoji: otherUser?.emoji || '👤'
+        };
+      });
+  }
+
+  // Add a new match
+  private async addMatch(userId: string, matchedUser: User): Promise<void> {
+    const matches = this.getStoredMatches();
+    
+    const newMatch = {
+      id: `match_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      participants: [userId, matchedUser.id.toString()],
+      createdAt: new Date(),
+      lastMessage: null,
+      isActive: true
+    };
+
+    matches.push(newMatch);
+    localStorage.setItem('user_matches', JSON.stringify(matches));
+  }
+
+  // Helper methods
+  private getLikes(): MatchData[] {
+    const stored = localStorage.getItem('user_likes');
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  private saveLikes(likes: MatchData[]): void {
+    localStorage.setItem('user_likes', JSON.stringify(likes));
+  }
+
+  private getStoredMatches(): any[] {
+    const stored = localStorage.getItem('user_matches');
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  private findUserById(userId: string): User | undefined {
+    // Import mock profiles to find user data
+    const { mockProfiles } = require('../data/mockData');
+    return mockProfiles.find((user: User) => user.id.toString() === userId);
+  }
+
+  private formatTime(date: Date): string {
+    const now = new Date();
+    const diff = now.getTime() - new Date(date).getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  }
+
+  // Clear all matches and likes (for testing)
+  clearAllData(): void {
+    localStorage.removeItem('user_likes');
+    localStorage.removeItem('user_matches');
+    localStorage.removeItem('swipe_removed_profiles');
+    localStorage.removeItem('swipe_current_index');
+  }
+}
