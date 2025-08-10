@@ -395,7 +395,7 @@ export const ProfilePage: React.FC = () => {
                     ? 'Already have an account? Sign in' 
                     : 'Need an account? Sign up'
                   }
-                </Button>
+                </button>
               </div>
             </form>
           </div>
