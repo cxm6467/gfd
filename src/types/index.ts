@@ -7,6 +7,7 @@ export interface User {
   emoji: string;
   dietaryInfo: string;
   location: string;
+  isActive?: boolean;
 }
 
 export interface Match {

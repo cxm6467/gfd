@@ -30,6 +30,56 @@ export const mockProfiles: User[] = [
     emoji: "📝",
     dietaryInfo: "Lifestyle Choice",
     location: "San Francisco, CA"
+  },
+  {
+    id: 4,
+    name: "Alex",
+    age: 29,
+    bio: "Chef specializing in GF cuisine",
+    description: "Professional chef who creates amazing gluten-free dishes. I believe food should be both safe and delicious. Let's cook together!",
+    emoji: "👨‍🍳",
+    dietaryInfo: "Celiac Disease",
+    location: "San Francisco, CA"
+  },
+  {
+    id: 5,
+    name: "Jordan",
+    age: 31,
+    bio: "Yoga instructor • Wellness enthusiast",
+    description: "Teaching yoga and living gluten-free has transformed my life. Seeking someone who values health, mindfulness, and authentic connections.",
+    emoji: "🧘‍♀️",
+    dietaryInfo: "Non-Celiac Gluten Sensitivity",
+    location: "San Francisco, CA"
+  },
+  {
+    id: 6,
+    name: "Taylor",
+    age: 27,
+    bio: "Travel blogger • Adventure seeker",
+    description: "I travel the world finding the best gluten-free restaurants and hidden gems. Looking for a travel companion who shares my dietary needs!",
+    emoji: "✈️",
+    dietaryInfo: "Lifestyle Choice",
+    location: "San Francisco, CA"
+  },
+  {
+    id: 7,
+    name: "Casey",
+    age: 30,
+    bio: "Software engineer • Home baker",
+    description: "By day I code, by night I perfect gluten-free sourdough recipes. Love solving problems and creating delicious GF treats!",
+    emoji: "💻",
+    dietaryInfo: "Celiac Disease",
+    location: "San Francisco, CA"
+  },
+  {
+    id: 8,
+    name: "Riley",
+    age: 25,
+    bio: "Artist • Creative soul",
+    description: "Creating art and living gluten-free. I find beauty in simple, clean living and authentic connections. Let's create something beautiful together!",
+    emoji: "🎨",
+    dietaryInfo: "Dermatitis Herpetiformis",
+    location: "San Francisco, CA"
   }
 ];
 
