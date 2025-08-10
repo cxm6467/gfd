@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { User } from '../../../types';
 import { ProfileCard } from '../../molecules/ProfileCard';
 import { Button } from '../../atoms/Button';
@@ -11,8 +12,24 @@ interface SwipeStackProps {
 }
 
 export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [removedProfiles, setRemovedProfiles] = useState<Set<number>>(new Set());
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    const saved = localStorage.getItem('swipe_current_index');
+    return saved ? parseInt(saved, 10) : 0;
+  });
+  
+  const [removedProfiles, setRemovedProfiles] = useState<Set<number>>(() => {
+    const saved = localStorage.getItem('swipe_removed_profiles');
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+
+  // Persist state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('swipe_current_index', currentIndex.toString());
+  }, [currentIndex]);
+
+  useEffect(() => {
+    localStorage.setItem('swipe_removed_profiles', JSON.stringify([...removedProfiles]));
+  }, [removedProfiles]);
 
   // Filter out profiles that have been swiped
   const activeProfiles = profiles.filter(profile => !removedProfiles.has(profile.id));
@@ -43,20 +60,25 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
     }
   };
 
+  const handleReset = () => {
+    setRemovedProfiles(new Set());
+    setCurrentIndex(0);
+    // Clear localStorage
+    localStorage.removeItem('swipe_removed_profiles');
+    localStorage.removeItem('swipe_current_index');
+  };
   if (activeProfiles.length === 0) {
     return (
       <div className="text-center py-12">
         <div className="space-y-4">
-          <p className="text-gray-500 text-lg">You've seen all available profiles!</p>
-          <button
-            onClick={() => {
-              setRemovedProfiles(new Set());
-              setCurrentIndex(0);
-            }}
-            className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors"
-          >
+          <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+            <Heart className="w-8 h-8 text-gray-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">You've seen everyone!</h3>
+          <p className="text-gray-500 mb-6">Check back later for new profiles, or review the ones you've seen.</p>
+          <Button onClick={handleReset} variant="outline">
             Show Profiles Again
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -109,8 +131,16 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
       {/* Profile Counter */}
       <div className="text-center mt-4">
         <p className="text-sm text-gray-500">
-          {activeProfiles.length - currentIndex} profiles remaining
+          {activeProfiles.length} of {profiles.length} profiles remaining
         </p>
+        {removedProfiles.size > 0 && (
+          <button
+            onClick={handleReset}
+            className="text-xs text-blue-600 hover:text-blue-700 mt-2 underline"
+          >
+            Reset and see all profiles again
+          </button>
+        )}
       </div>
     </div>
   );
