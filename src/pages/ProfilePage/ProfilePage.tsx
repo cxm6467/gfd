@@ -6,7 +6,7 @@ import { AppLayout } from '../../components/templates/AppLayout';
 import { Button } from '../../components/atoms/Button';
 import { ProfileImageUpload } from '../../components/molecules/ProfileImageUpload';
 import { JWTInspector } from '../../components/organisms/JWTInspector';
-import { OktaAuthService } from '../../services/oktaAuthService';
+import { Auth0AuthService } from '../../services/auth0AuthService';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -30,7 +30,7 @@ export const ProfilePage: React.FC = () => {
     dietaryRestrictions: user?.dietaryRestrictions || 'celiac_disease'
   });
 
-  const oktaAuthService = OktaAuthService.getInstance();
+  const auth0AuthService = Auth0AuthService.getInstance();
 
   useEffect(() => {
     if (user) {
@@ -107,11 +107,11 @@ export const ProfilePage: React.FC = () => {
     navigate('/');
   };
 
-  const handleOktaSignIn = async () => {
+  const handleAuth0SignIn = async () => {
     try {
-      await oktaAuthService.signIn();
+      await auth0AuthService.signIn();
     } catch (error) {
-      setError('Okta sign in failed');
+      setError('Auth0 sign in failed');
     }
   };
 
@@ -416,14 +416,14 @@ export const ProfilePage: React.FC = () => {
                   <span className="px-2 bg-white text-gray-500">or</span>
                 </div>
               <Button
-                onClick={handleOktaSignIn}
+                onClick={handleAuth0SignIn}
                 disabled={loading}
                 variant="outline"
                 fullWidth
               >
                 <div className="flex items-center justify-center">
                   <Key className="w-5 h-5 mr-3 text-blue-600" />
-                  Sign in with Okta (JWT Demo)
+                  Sign in with Auth0 (JWT Demo)
                 </div>
               </Button>
               </div>

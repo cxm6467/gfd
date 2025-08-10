@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { OktaAuthService } from '../../services/oktaAuthService';
+import { Auth0AuthService } from '../../services/auth0AuthService';
 import { useTheme } from '../../hooks/useTheme';
 
 export const CallbackPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const oktaAuthService = OktaAuthService.getInstance();
+  const auth0AuthService = Auth0AuthService.getInstance();
 
   useEffect(() => {
     handleCallback();
@@ -14,7 +14,7 @@ export const CallbackPage: React.FC = () => {
 
   const handleCallback = async () => {
     try {
-      await oktaAuthService.handleCallback();
+      await auth0AuthService.handleCallback();
       navigate('/dashboard');
     } catch (error) {
       console.error('Callback error:', error);

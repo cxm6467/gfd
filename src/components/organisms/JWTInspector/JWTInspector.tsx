@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, Copy, RefreshCw, Key, Clock, User } from 'lucide-react';
-import { OktaAuthService } from '../../../services/oktaAuthService';
-import { jwtUtils } from '../../../services/oktaConfig';
+import { Auth0AuthService } from '../../../services/auth0AuthService';
+import { jwtUtils } from '../../../services/auth0Config';
 import { Button } from '../../atoms/Button';
 import { useTheme } from '../../../hooks/useTheme';
 
@@ -15,7 +15,7 @@ export const JWTInspector: React.FC<JWTInspectorProps> = ({ isOpen, onClose }) =
   const [tokenData, setTokenData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'access' | 'id' | 'user'>('access');
-  const oktaAuthService = OktaAuthService.getInstance();
+  const auth0AuthService = Auth0AuthService.getInstance();
 
   useEffect(() => {
     if (isOpen) {
@@ -26,7 +26,7 @@ export const JWTInspector: React.FC<JWTInspectorProps> = ({ isOpen, onClose }) =
   const loadTokenData = async () => {
     setLoading(true);
     try {
-      const data = await oktaAuthService.getTokenInfo();
+      const data = await auth0AuthService.getTokenInfo();
       setTokenData(data);
     } catch (error) {
       console.error('Error loading token data:', error);
