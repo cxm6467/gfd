@@ -5,27 +5,40 @@ import { Shield, Users, MessageCircle, Heart } from 'lucide-react';
 import { Logo } from '../../components/atoms/Logo';
 import { Button } from '../../components/atoms/Button';
 import { TestModeToggle } from '../../components/molecules/TestModeToggle';
-import { AuthModal } from '../../components/organisms/AuthModal';
+import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { user, quickSignIn } = useAuth();
   
   const [isTestMode, setIsTestMode] = useState(() => {
     const stored = localStorage.getItem('VITE_TEST_MODE');
     return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE !== 'false';
   });
 
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
   };
 
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false);
-    navigate('/profile');
+  const handleQuickSignIn = async () => {
+    try {
+      await quickSignIn();
+      navigate('/profile');
+    } catch (error) {
+      console.error('Quick sign in failed:', error);
+    }
   };
+
+  const handleStartJourney = () => {
+    if (user) {
+      navigate('/dashboard');
+    } else {
+    navigate('/profile');
+    }
+  };
+
   return (
     <div className={`min-h-screen ${theme.colors.background}`}>
       {/* Hero Section */}
@@ -37,16 +50,18 @@ export const HomePage: React.FC = () => {
             
             <div className="flex items-center space-x-4">
               {isTestMode ? (
-                <Button onClick={() => navigate('/dashboard')}>
+                <Button onClick={handleQuickSignIn}>
                   Quick Sign In (Test)
                 </Button>
               ) : (
                 <>
-                  <button className={`${theme.colors.textSecondary} hover:text-gray-800 font-medium transition-colors`}>
-                    onClick={() => setShowAuthModal(true)}
+                  <button 
+                    onClick={() => navigate('/profile')}
+                    className={`${theme.colors.textSecondary} hover:text-gray-800 font-medium transition-colors`}
+                  >
                     Sign In
                   </button>
-                  <Button onClick={() => navigate('/dashboard')}>
+                  <Button onClick={() => navigate('/profile')}>
                     Join Now
                   </Button>
                 </>
@@ -70,8 +85,7 @@ export const HomePage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8 md:mb-16 px-4">
               <Button 
-                onClick={() => setShowAuthModal(true)}
-                onClick={() => navigate('/profile')}
+                onClick={handleStartJourney}
                 size="lg"
                 fullWidth={window.innerWidth < 640}
               >
@@ -189,12 +203,6 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Auth Modal */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={handleAuthSuccess}
-      />
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-400 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,5 +1,7 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth';
 import { HomePage } from './pages/HomePage';
 import { DashboardPage } from './pages/DashboardPage';
 import { MatchesPage } from './pages/MatchesPage';
@@ -20,6 +22,19 @@ import { SafetyPage } from './pages/SafetyPage';
 // TODO: Implement API integration layer
 
 function App() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading GF'd...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Routes>

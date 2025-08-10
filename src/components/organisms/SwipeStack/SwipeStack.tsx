@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { User } from '../../../types';
 import { ProfileCard } from '../../molecules/ProfileCard';
 import { Button } from '../../atoms/Button';
+import { MatchService } from '../../../services/matchService';
+import { useAuth } from '../../../hooks/useAuth';
 import { Heart, X } from 'lucide-react';
 
 interface SwipeStackProps {
@@ -12,6 +14,9 @@ interface SwipeStackProps {
 }
 
 export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass }) => {
+  const { user } = useAuth();
+  const matchService = MatchService.getInstance();
+  
   const [currentIndex, setCurrentIndex] = useState(() => {
     const saved = localStorage.getItem('swipe_current_index');
     return saved ? parseInt(saved, 10) : 0;
@@ -34,9 +39,23 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
   // Filter out profiles that have been swiped
   const activeProfiles = profiles.filter(profile => !removedProfiles.has(profile.id));
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (currentIndex < activeProfiles.length) {
       const currentProfile = activeProfiles[currentIndex];
+      
+      // Add to matches system
+      if (user) {
+        try {
+          const result = await matchService.addLike(user.id, currentProfile);
+          if (result.isMatch) {
+            // Show match notification
+            alert(`🎉 It's a match with ${currentProfile.name}!`);
+          }
+        } catch (error) {
+          console.error('Error adding like:', error);
+        }
+      }
+      
       onLike(currentProfile);
       setRemovedProfiles(prev => new Set([...prev, currentProfile.id]));
       
@@ -47,7 +66,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
     }
   };
 
-  const handlePass = () => {
+  const handlePass = async () => {
     if (currentIndex < activeProfiles.length) {
       const currentProfile = activeProfiles[currentIndex];
       onPass(currentProfile);
@@ -67,6 +86,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
     localStorage.removeItem('swipe_removed_profiles');
     localStorage.removeItem('swipe_current_index');
   };
+  
   if (activeProfiles.length === 0) {
     return (
       <div className="text-center py-12">
