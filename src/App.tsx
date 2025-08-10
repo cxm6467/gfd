@@ -13,6 +13,7 @@ import { VerificationPage } from './pages/VerificationPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { SafetyPage } from './pages/SafetyPage';
+import { CallbackPage } from './pages/CallbackPage';
 
 // TODO: Implement authentication service integration
 // TODO: Add real profile service integration
@@ -49,6 +50,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/safety" element={<SafetyPage />} />
+        <Route path="/login/callback" element={<CallbackPage />} />
       </Routes>
     </Router>
   );

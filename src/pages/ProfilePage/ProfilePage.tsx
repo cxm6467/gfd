@@ -1,10 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Heart, Mail, Lock, MapPin, Calendar } from 'lucide-react';
+import { User, Heart, Mail, Lock, MapPin, Calendar, Key } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { Button } from '../../components/atoms/Button';
 import { ProfileImageUpload } from '../../components/molecules/ProfileImageUpload';
+import { JWTInspector } from '../../components/organisms/JWTInspector';
+import { OktaAuthService } from '../../services/oktaAuthService';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -14,6 +16,7 @@ export const ProfilePage: React.FC = () => {
   const { user, signIn, signUp, signOut, isAuthenticated } = useAuth();
   
   const [isSignUp, setIsSignUp] = useState(!isAuthenticated);
+  const [showJWTInspector, setShowJWTInspector] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -26,6 +29,8 @@ export const ProfilePage: React.FC = () => {
     location: user?.location || '',
     dietaryRestrictions: user?.dietaryRestrictions || 'celiac_disease'
   });
+
+  const oktaAuthService = OktaAuthService.getInstance();
 
   useEffect(() => {
     if (user) {
@@ -100,6 +105,14 @@ export const ProfilePage: React.FC = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
+  };
+
+  const handleOktaSignIn = async () => {
+    try {
+      await oktaAuthService.signIn();
+    } catch (error) {
+      setError('Okta sign in failed');
+    }
   };
 
   // If user is authenticated, show profile editor
@@ -200,6 +213,14 @@ export const ProfilePage: React.FC = () => {
                     Start Matching
                   </Button>
                   <Button 
+                    onClick={() => setShowJWTInspector(true)}
+                    variant="outline"
+                    fullWidth
+                  >
+                    <Key className="w-4 h-4 mr-2" />
+                    Inspect JWT
+                  </Button>
+                  <Button 
                     onClick={handleSignOut}
                     variant="outline"
                     fullWidth
@@ -209,6 +230,11 @@ export const ProfilePage: React.FC = () => {
                 </div>
               </div>
             </div>
+            
+            <JWTInspector 
+              isOpen={showJWTInspector} 
+              onClose={() => setShowJWTInspector(false)} 
+            />
           </div>
         </div>
       </AppLayout>
@@ -381,6 +407,26 @@ export const ProfilePage: React.FC = () => {
                 {loading ? 'Please wait...' : (isSignUp ? 'Create Account & Start Matching' : 'Sign In')}
               </Button>
 
+              {/* Okta OAuth Option */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">or</span>
+                </div>
+              <Button
+                onClick={handleOktaSignIn}
+                disabled={loading}
+                variant="outline"
+                fullWidth
+              >
+                <div className="flex items-center justify-center">
+                  <Key className="w-5 h-5 mr-3 text-blue-600" />
+                  Sign in with Okta (JWT Demo)
+                </div>
+              </Button>
+              </div>
               {/* Toggle Sign Up/Sign In */}
               <div className="text-center">
                 <button
