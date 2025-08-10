@@ -1,0 +1,1 @@
+export { MessageDetailPage } from './MessageDetailPage';

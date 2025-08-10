@@ -1,0 +1,147 @@
+# GF'd Dating App - Local Development Environment
+version: '3.8'
+
+services:
+  # Frontend (React + Vite)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_TEST_MODE=true
+      - VITE_API_URL=http://localhost:4000
+      - VITE_SUPABASE_URL=http://localhost:54321
+      - VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - gfd-network
+
+  # Backend (Fastify + GraphQL)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - DATABASE_URL=postgresql://gfd_user:gfd_password@postgres:5432/gfd_db
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your_super_secret_jwt_key_for_development
+      - ENCRYPTION_KEY=your_32_character_encryption_key_dev
+      - SUPABASE_URL=http://supabase:8000
+      - SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+      - supabase
+    networks:
+      - gfd-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=gfd_db
+      - POSTGRES_USER=gfd_user
+      - POSTGRES_PASSWORD=gfd_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - gfd-network
+
+  # Redis Cache & Sessions
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass gfd_redis_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - gfd-network
+
+  # Supabase (Self-hosted for local development)
+  supabase:
+    image: supabase/supabase:latest
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=gfd_db
+      - POSTGRES_USER=gfd_user
+      - POSTGRES_PASSWORD=gfd_password
+      - JWT_SECRET=your_super_secret_jwt_key_for_development
+      - ANON_KEY=your_supabase_anon_key
+      - SERVICE_ROLE_KEY=your_supabase_service_role_key
+    ports:
+      - "54321:8000"
+    depends_on:
+      - postgres
+    networks:
+      - gfd-network
+
+  # MinIO (S3-compatible file storage)
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=gfd_minio_user
+      - MINIO_ROOT_PASSWORD=gfd_minio_password
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console
+    networks:
+      - gfd-network
+
+  # MongoDB (for analytics and logs)
+  mongodb:
+    image: mongo:7
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=gfd_mongo_user
+      - MONGO_INITDB_ROOT_PASSWORD=gfd_mongo_password
+      - MONGO_INITDB_DATABASE=gfd_analytics
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - gfd-network
+
+  # Nginx (Reverse Proxy)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - gfd-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  mongodb_data:
+
+networks:
+  gfd-network:
+    driver: bridge

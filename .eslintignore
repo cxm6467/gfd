@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+dist/
+build/
+coverage/
+
+# Generated files
+*.min.js
+*.min.css
+vite.config.ts
+tailwind.config.js
+
+# Test files (if you want to exclude them from linting)
+# **/*.test.ts
+# **/*.test.tsx
+# **/*.spec.ts
+# **/*.spec.tsx
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
