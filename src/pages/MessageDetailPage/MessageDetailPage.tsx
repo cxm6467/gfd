@@ -15,17 +15,22 @@ export const MessageDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { theme } = useTheme();
   
-  // Initialize services first
+  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState(mockMessages);
+  const [moderationWarning, setModerationWarning] = useState<string | null>(null);
+  
+  // Initialize services after state
   const storageService = StorageService.getInstance();
   const aiModerationService = AIModerationService.getInstance();
   
-  const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState(() => {
+  // Load messages from session storage on mount
+  React.useEffect(() => {
     // Load messages from session storage
     const conversationState = storageService.getConversationState(id || '');
-    return conversationState.messages || mockMessages;
-  });
-  const [moderationWarning, setModerationWarning] = useState<string | null>(null);
+    if (conversationState.messages) {
+      setMessages(conversationState.messages);
+    }
+  }, [id]);
   
   // Get match data from session storage
   const matches = storageService.getMatches();
@@ -75,6 +80,37 @@ export const MessageDetailPage: React.FC = () => {
           lastMessage: message,
           lastActivity: new Date().toISOString()
         });
+
+        // Generate AI response from the match after a delay
+        setTimeout(async () => {
+          try {
+            const aiResponse = await aiModerationService.generateMatchResponse(
+              newMessage,
+              matchName,
+              matchDietaryInfo
+            );
+
+            const responseMessage = {
+              id: Date.now() + 1,
+              sender: matchName,
+              message: aiResponse,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              isMe: false
+            };
+
+            const finalMessages = [...updatedMessages, responseMessage];
+            setMessages(finalMessages);
+
+            // Save updated conversation with AI response
+            storageService.saveConversationState(id || '', {
+              messages: finalMessages,
+              lastMessage: responseMessage,
+              lastActivity: new Date().toISOString()
+            });
+          } catch (error) {
+            console.error('Error generating AI response:', error);
+          }
+        }, 1500 + Math.random() * 2000); // Random delay between 1.5-3.5 seconds
 
         console.log('Message sent:', newMessage);
         setModerationWarning(null);
