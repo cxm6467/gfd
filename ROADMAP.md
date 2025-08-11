@@ -587,6 +587,7 @@ This roadmap outlines the development phases for GF'd, a specialized dating plat
 - [ ] Configure local database
 - [ ] Run all tests and ensure they pass
 - [ ] Deploy to local Docker environment
+- [ ] Verify git hooks are working (`git commit` should validate format)
 
 ### Next Week Actions
 - [ ] Choose first milestone to implement
@@ -594,6 +595,8 @@ This roadmap outlines the development phases for GF'd, a specialized dating plat
 - [ ] Establish code review process
 - [ ] Set up monitoring and alerting
 - [ ] Begin Phase 1 development
+- [ ] Practice conventional commit format
+- [ ] Ensure all team members understand quality gates
 
 ---
 

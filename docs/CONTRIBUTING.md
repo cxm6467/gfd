@@ -367,6 +367,32 @@ Any other context or screenshots
 - **Simple bug fixes**
 - **Test additions**
 
+## 🔧 Development Workflow
+
+### Git Hooks
+We use Husky to enforce quality standards:
+
+- **Pre-commit**: Runs lint-staged to format and lint staged files
+- **Commit-msg**: Validates commit messages against conventional commits format
+- **Pre-push**: Runs full linting, type checking, and test suite
+
+### Quality Gates
+All commits must pass:
+- ✅ **ESLint** with no errors
+- ✅ **Prettier** formatting
+- ✅ **TypeScript** type checking
+- ✅ **Conventional commit** message format
+- ✅ **Test suite** with no failures
+
+### Bypassing Hooks (Emergency Only)
+```bash
+# Skip pre-commit (not recommended)
+git commit --no-verify -m "fix: emergency hotfix"
+
+# Skip pre-push (not recommended)
+git push --no-verify
+```
+
 ## 📞 Getting Help
 
 ### Communication Channels
