@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, Copy, RefreshCw, Key, Clock, User } from 'lucide-react';
+import { Eye, Copy, RefreshCw, Key, Clock, User, X } from 'lucide-react';
 import { Auth0AuthService } from '../../../services/auth0AuthService';
 import { jwtUtils } from '../../../services/auth0Config';
 import { Button } from '../../atoms/Button';
