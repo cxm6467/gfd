@@ -34,7 +34,7 @@ export const TestModeToggle: React.FC<TestModeToggleProps> = ({ isTestMode, onTo
         onClick={handleToggle}
         disabled={isToggling}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600 ${
-          isTestMode ? 'bg-yellow-400' : 'bg-green-500'
+          isTestMode ? 'bg-green-500' : 'bg-red-500'
         }`}
       >
         <span
