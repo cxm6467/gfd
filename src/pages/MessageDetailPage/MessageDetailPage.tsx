@@ -14,6 +14,11 @@ export const MessageDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { theme } = useTheme();
+  
+  // Initialize services first
+  const storageService = StorageService.getInstance();
+  const aiModerationService = AIModerationService.getInstance();
+  
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState(() => {
     // Load messages from session storage
@@ -21,9 +26,6 @@ export const MessageDetailPage: React.FC = () => {
     return conversationState.messages || mockMessages;
   });
   const [moderationWarning, setModerationWarning] = useState<string | null>(null);
-  
-  const storageService = StorageService.getInstance();
-  const aiModerationService = AIModerationService.getInstance();
   
   // Get match data from session storage
   const matches = storageService.getMatches();
