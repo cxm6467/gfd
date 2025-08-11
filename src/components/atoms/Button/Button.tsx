@@ -9,6 +9,7 @@ interface ButtonProps {
   fullWidth?: boolean;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  className?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -19,6 +20,7 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   disabled = false,
   type = 'button',
+  className = '',
 }) => {
   const { theme } = useTheme();
 
@@ -44,7 +46,7 @@ export const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabledClass}`}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabledClass} ${className}`}
     >
       {children}
     </button>

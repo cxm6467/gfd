@@ -415,6 +415,8 @@ export const ProfilePage: React.FC = () => {
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">or</span>
                 </div>
+              </div>
+              
               <Button
                 onClick={handleAuth0SignIn}
                 disabled={loading}
@@ -426,7 +428,6 @@ export const ProfilePage: React.FC = () => {
                   Sign in with Auth0 (JWT Demo)
                 </div>
               </Button>
-              </div>
               {/* Toggle Sign Up/Sign In */}
               <div className="text-center">
                 <button
