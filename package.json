@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:frontend": "vite",
-    "dev:backend": "echo 'Backend will be implemented later' && sleep infinity",
+    "dev:backend": "echo 'Backend will be implemented later' && node -e \"setInterval(() => {}, 1000)\"",
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "tsc && vite build",
     "build:backend": "echo 'Backend build placeholder'",
