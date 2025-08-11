@@ -81,37 +81,17 @@ export class MatchService {
 
   // Get all matches for current user
   async getMatches(userId: string): Promise<Match[]> {
-    // Try to get matches from session storage first
+    // Get matches from session storage
     const sessionMatches = this.storageService.getMatches();
-    if (sessionMatches.length > 0) {
-      return sessionMatches.map(match => ({
-        id: parseInt(match.id.replace('match_', '')),
-        name: match.profile?.name || 'Unknown',
-        lastMessage: match.lastMessage || "You matched! Say hello 👋",
-        time: this.formatTime(new Date(match.matchedAt)),
-        emoji: match.profile?.emoji || '👤'
-      }));
-    }
     
-    // Fallback to localStorage
-    const likes = this.getLikes();
-    const matches = this.getStoredMatches();
-    
-    // Convert stored matches to Match format
-    return matches
-      .filter(match => match.participants.includes(userId))
-      .map(match => {
-        const otherUserId = match.participants.find(id => id !== userId);
-        const otherUser = this.findUserById(otherUserId!);
-        
-        return {
-          id: parseInt(match.id.replace('match_', '')),
-          name: otherUser?.name || 'Unknown',
-          lastMessage: match.lastMessage || "You matched! Say hello 👋",
-          time: this.formatTime(match.createdAt),
-          emoji: otherUser?.emoji || '👤'
-        };
-      });
+    // Convert session matches to Match format
+    return sessionMatches.map(match => ({
+      id: parseInt(match.id.replace(/\D/g, '')) || Math.floor(Math.random() * 1000),
+      name: match.profile?.name || 'Unknown',
+      lastMessage: match.lastMessage || "You matched! Say hello 👋",
+      time: this.formatTime(new Date(match.matchedAt)),
+      emoji: match.profile?.emoji || '👤'
+    }));
   }
 
   // Add a new match
@@ -154,8 +134,13 @@ export class MatchService {
 
   private findUserById(userId: string): User | undefined {
     // Import mock profiles to find user data
-    const { mockProfiles } = require('../data/mockData');
-    return mockProfiles.find((user: User) => user.id.toString() === userId);
+    try {
+      const { mockProfiles } = require('../data/mockData');
+      return mockProfiles.find((user: User) => user.id.toString() === userId);
+    } catch (error) {
+      console.error('Error loading mock profiles:', error);
+      return undefined;
+    }
   }
 
   private formatTime(date: Date): string {

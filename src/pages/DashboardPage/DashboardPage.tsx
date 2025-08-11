@@ -3,17 +3,21 @@ import { AppLayout } from '../../components/templates/AppLayout';
 import { SwipeStack } from '../../components/organisms/SwipeStack';
 import { mockProfiles } from '../../data/mockData';
 import { User } from '../../types';
+import { MatchService } from '../../services/matchService';
+import { useAuth } from '../../hooks/useAuth';
 
 export const DashboardPage: React.FC = () => {
-  // TODO: Implement real profile service integration
+  const { user } = useAuth();
+  const matchService = MatchService.getInstance();
+  
   const handleLike = (profile: User) => {
     console.log('Liked:', profile.name);
-    // TODO: Send like to backend API
+    // Like action is handled by SwipeStack component
   };
 
   const handlePass = (profile: User) => {
     console.log('Passed:', profile.name);
-    // TODO: Send pass to backend API
+    // Pass action is handled by SwipeStack component
   };
 
   return (

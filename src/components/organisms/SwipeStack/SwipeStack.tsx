@@ -75,7 +75,8 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
           const result = await matchService.addLike(user.id, currentProfile);
           if (result.isMatch) {
             // Show match notification
-            alert(`🎉 It's a match with ${currentProfile.name}!`);
+            console.log(`🎉 It's a match with ${currentProfile.name}!`);
+            // TODO: Replace with proper match notification UI
           }
         } catch (error) {
           console.error('Error adding like:', error);
@@ -85,23 +86,23 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
       onLike(currentProfile);
       setRemovedProfiles(prev => new Set([...prev, currentProfile.id]));
       
-      // Move to next profile or reset if we've seen all
-      if (currentIndex >= activeProfiles.length - 1) {
-        setCurrentIndex(0);
-      }
+      // Move to next profile
+      setCurrentIndex(prev => prev + 1);
     }
   };
 
   const handlePass = async () => {
     if (currentIndex < activeProfiles.length) {
       const currentProfile = activeProfiles[currentIndex];
+      
+      // Save pass action to session storage
+      storageService.addSwipeAction('pass', currentProfile.id.toString());
+      
       onPass(currentProfile);
       setRemovedProfiles(prev => new Set([...prev, currentProfile.id]));
       
-      // Move to next profile or reset if we've seen all
-      if (currentIndex >= activeProfiles.length - 1) {
-        setCurrentIndex(0);
-      }
+      // Move to next profile
+      setCurrentIndex(prev => prev + 1);
     }
   };
 
