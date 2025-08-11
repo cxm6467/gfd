@@ -69,7 +69,7 @@ export const RestaurantsPage: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className={`text-2xl md:text-3xl font-bold ${theme.colors.text} mb-2`}>
-              GF'd Restaurants{isTestMode && <span className="text-red-600"> • San Francisco</span>}
+              GF'd Restaurants{isTestMode && import.meta.env.VITE_TEST_MODE === 'true' && <span className="text-red-600"> • San Francisco</span>}
             </h1>
             <div className="flex items-center text-sm text-gray-500">
               <MapPin className="h-4 w-4 mr-1" />

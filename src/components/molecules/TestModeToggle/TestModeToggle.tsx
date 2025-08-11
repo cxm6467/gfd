@@ -12,6 +12,11 @@ export const TestModeToggle: React.FC<TestModeToggleProps> = ({ isTestMode, onTo
   const handleToggle = () => {
     if (isToggling) return; // Prevent multiple clicks during animation
     
+    // Only allow toggle if VITE_TEST_MODE is enabled
+    if (import.meta.env.VITE_TEST_MODE !== 'true') {
+      return;
+    }
+    
     setIsToggling(true);
     const newState = !isTestMode;
     onToggle(newState);

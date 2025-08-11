@@ -132,6 +132,11 @@ export class AuthService {
 
   // Quick sign in for test mode
   async quickSignIn(): Promise<{ user: User; tokens: AuthTokens }> {
+    // Only allow in test mode
+    if (import.meta.env.VITE_TEST_MODE !== 'true') {
+      throw new Error('Quick sign in only available in test mode');
+    }
+    
     console.log('TODO: Remove quick sign in before production - test mode only');
 
     // Create or get test user

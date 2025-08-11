@@ -49,7 +49,7 @@ export const HomePage: React.FC = () => {
             <Logo size="md" />
             
             <div className="flex items-center space-x-4">
-              {isTestMode ? (
+              {isTestMode && import.meta.env.VITE_TEST_MODE === 'true' ? (
                 <Button onClick={handleQuickSignIn}>
                   Quick Sign In (Test)
                 </Button>

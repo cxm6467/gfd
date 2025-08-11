@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo } from '../../atoms/Logo';
 import { TestModeToggle } from '../../molecules/TestModeToggle';
@@ -29,16 +29,18 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {/* Test Mode Banner */}
-      <div className="bg-red-600 text-white px-4 py-3 text-center text-sm font-medium">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span>🧪</span>
-            <span>Test Mode - Development Environment</span>
+      {/* Test Mode Banner - Only show when VITE_TEST_MODE is true */}
+      {isTestMode && (
+        <div className="bg-red-600 text-white px-4 py-3 text-center text-sm font-medium">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span>🧪</span>
+              <span>Test Mode - Development Environment</span>
+            </div>
+            <TestModeToggle isTestMode={isTestMode} onToggle={handleTestModeToggle} />
           </div>
-          <TestModeToggle isTestMode={isTestMode} onToggle={handleTestModeToggle} />
         </div>
-      </div>
+      )}
       
       <header className={`${theme.colors.surface} shadow-sm border-b ${theme.colors.border}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
