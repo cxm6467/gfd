@@ -45,6 +45,11 @@ npm run services:up
 # Start frontend development
 npm run dev
 
+# Run quality checks
+npm run lint
+npm run typecheck
+npm test
+
 # View service logs
 npm run services:logs
 

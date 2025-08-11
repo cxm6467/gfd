@@ -26,7 +26,11 @@ Thank you for your interest in contributing to GF'd! This guide will help you ge
    ```bash
    npm install
    ```
-5. **Start development**
+5. **Set up git hooks**
+   ```bash
+   npm run prepare
+   ```
+6. **Start development**
    ```bash
    npm run dev
    ```
@@ -41,7 +45,7 @@ Thank you for your interest in contributing to GF'd! This guide will help you ge
 - **hotfix/**: Critical production fixes
 
 ### Commit Convention
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+We strictly enforce [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
 
 ```
 type(scope): description
@@ -50,16 +54,50 @@ feat(auth): add two-factor authentication
 fix(ui): resolve mobile navigation issue
 docs(api): update GraphQL schema documentation
 test(components): add ProfileCard test suite
+perf(matching): optimize compatibility algorithm
+refactor(auth): simplify token validation logic
 ```
 
 **Types:**
-- `feat`: New features
-- `fix`: Bug fixes
-- `docs`: Documentation changes
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `test`: Adding or updating tests
-- `chore`: Maintenance tasks
+- `feat`: A new feature for the user
+- `fix`: A bug fix for the user
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `build`: Changes that affect the build system or external dependencies
+- `ci`: Changes to our CI configuration files and scripts
+- `chore`: Other changes that don't modify src or test files
+- `revert`: Reverts a previous commit
+
+**Scope (optional):**
+- `auth`: Authentication and authorization
+- `ui`: User interface components
+- `api`: Backend API changes
+- `db`: Database schema or queries
+- `config`: Configuration changes
+- `deps`: Dependency updates
+
+**Breaking Changes:**
+For breaking changes, add `!` after the type/scope:
+```
+feat(api)!: change user authentication flow
+```
+
+**Examples:**
+```
+feat(auth): add OAuth2 Google integration
+fix(ui): resolve mobile navigation overflow
+docs(readme): update installation instructions
+style(components): format code with prettier
+refactor(matching): extract compatibility scoring logic
+perf(api): add database query caching
+test(auth): add unit tests for login flow
+build(deps): upgrade React to v18.3.1
+ci(github): add automated security scanning
+chore(config): update ESLint rules
+```
 
 ## 🏗️ Architecture Guidelines
 
@@ -231,6 +269,8 @@ interface ProfileCardProps {
 3. **Add tests** for new functionality
 4. **Follow code style** guidelines
 5. **Rebase on latest** main branch
+6. **Follow conventional commits** format
+7. **Ensure pre-commit hooks** pass
 
 ### PR Template
 ```markdown
@@ -242,17 +282,22 @@ Brief description of changes
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Code refactoring
 
 ## Testing
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing completed
+- [ ] All pre-push checks pass
 
 ## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
 - [ ] No breaking changes
+- [ ] Commit messages follow conventional format
+- [ ] Pre-commit hooks pass
 ```
 
 ### Review Process
@@ -260,6 +305,8 @@ Brief description of changes
 2. **Two approvals** required
 3. **Security review** for sensitive changes
 4. **Performance review** for optimization changes
+5. **Conventional commit** format enforced
+6. **Pre-push hooks** must pass
 
 ## 🐛 Bug Reports
 

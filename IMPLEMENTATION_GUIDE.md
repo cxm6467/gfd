@@ -365,6 +365,28 @@ npm install socket.io-client
 
 ---
 
+## 🛠️ Development Commands
+
+```bash
+# Start all infrastructure services
+npm run services:up
+
+# Start frontend development
+npm run dev
+
+# Quality checks (run automatically via git hooks)
+npm run lint          # ESLint checking
+npm run lint:fix      # Auto-fix linting issues
+npm run typecheck     # TypeScript type checking
+npm test              # Run test suite
+npm run test:coverage # Test coverage report
+
+# View service logs
+npm run services:logs
+```
+
+---
+
 ## 📋 Implementation Priority Matrix
 
 ### Week 1-2: Foundation

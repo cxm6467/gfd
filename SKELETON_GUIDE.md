@@ -193,6 +193,8 @@ npm run services:down
 3. **Implement features** incrementally
 4. **Run tests**: `npm test`
 5. **Check linting**: `npm run lint`
+6. **Follow conventional commits**: Use proper commit message format
+7. **Pre-push checks**: Automated quality gates before pushing
 
 ### **Implementation Cycle**
 1. **Pick a milestone** from `ROADMAP.md`
@@ -201,6 +203,7 @@ npm run services:down
 4. **Implement the service** replacing TODO sections
 5. **Test thoroughly** with real and edge case data
 6. **Update documentation** as needed
+7. **Commit with conventional format**: `feat(service): add new functionality`
 
 ## 🧪 **Testing Strategy**
 

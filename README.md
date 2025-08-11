@@ -287,12 +287,45 @@ All pages are mobile-responsive and accessibility compliant.
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Write tests for new functionality
-5. Submit a pull request
+1. **Fork the repository**
+2. **Create a feature branch** using conventional naming:
+   ```bash
+   git checkout -b feat/user-verification
+   git checkout -b fix/login-error
+   git checkout -b docs/api-updates
+   ```
+3. **Make your changes** following our coding standards
+4. **Write tests** for new functionality
+5. **Commit using conventional format**:
+   ```bash
+   git commit -m "feat(auth): add two-factor authentication"
+   git commit -m "fix(ui): resolve mobile navigation issue"
+   ```
+6. **Push your branch** (pre-push hooks will run automatically)
+7. **Submit a pull request** with detailed description
 
+### Commit Message Format
+We enforce [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Examples:**
+- `feat(auth): add OAuth2 Google integration`
+- `fix(ui): resolve mobile navigation overflow`
+- `docs(readme): update installation instructions`
+- `test(auth): add unit tests for login flow`
+
+### Git Hooks
+Automated quality checks run on:
+- **Pre-commit**: Linting and formatting
+- **Commit-msg**: Conventional commit validation
+- **Pre-push**: Linting, type checking, and tests
 ## 📊 Performance
 
 - **Core Web Vitals** optimized
