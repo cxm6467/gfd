@@ -6,7 +6,7 @@ export const auth0Config = {
   clientId: import.meta.env.VITE_AUTH0_CLIENT_ID || 'your-client-id',
   authorizationParams: {
     redirect_uri: window.location.origin + '/login/callback',
-    scope: 'openid profile email',
+    scope: 'openid profile email offline_access',
     audience: import.meta.env.VITE_AUTH0_AUDIENCE || 'https://api.gfd.com',
   },
   useRefreshTokens: true,
