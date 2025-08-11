@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import { TestModeToggle } from '../TestModeToggle';
+import { useTestMode } from '../../../hooks/useTestMode';
 
 export const TestModeBanner: React.FC = () => {
-  const [isTestMode, setIsTestMode] = useState(() => {
-    const stored = localStorage.getItem('VITE_TEST_MODE');
-    return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE === 'true';
-  });
-
-  const handleTestModeToggle = (enabled: boolean) => {
-    setIsTestMode(enabled);
-    localStorage.setItem('VITE_TEST_MODE', enabled.toString());
-    
-    // Update the environment variable simulation
-    if (typeof window !== 'undefined') {
-      (window as any).__VITE_TEST_MODE__ = enabled.toString();
-    }
-  };
+  const { isTestMode, toggleTestMode } = useTestMode();
 
   // Always show banner in development
   const showBanner = import.meta.env.DEV || isTestMode;
@@ -29,7 +17,7 @@ export const TestModeBanner: React.FC = () => {
           <span>🧪</span>
           <span>Test Mode Active - Development Environment</span>
         </div>
-        <TestModeToggle isTestMode={isTestMode} onToggle={handleTestModeToggle} />
+        <TestModeToggle isTestMode={isTestMode} onToggle={toggleTestMode} />
       </div>
     </div>
   );

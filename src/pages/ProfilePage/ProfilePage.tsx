@@ -9,23 +9,18 @@ import { JWTInspector } from '../../components/organisms/JWTInspector';
 import { Auth0AuthService } from '../../services/auth0AuthService';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
+import { useTestMode } from '../../hooks/useTestMode';
 
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { user, signIn, signUp, signOut, isAuthenticated } = useAuth();
+  const { isTestMode } = useTestMode();
   
   const [isSignUp, setIsSignUp] = useState(!isAuthenticated);
   const [showJWTInspector, setShowJWTInspector] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [isTestMode] = useState(() => {
-    const stored = localStorage.getItem('VITE_TEST_MODE');
-    const envValue = import.meta.env.VITE_TEST_MODE;
-    const windowValue = typeof window !== 'undefined' ? (window as any).__VITE_TEST_MODE__ : null;
-    return stored ? stored === 'true' : (windowValue === 'true' || envValue === 'true');
-  });
   
   const [formData, setFormData] = useState({
     email: user?.email || '',
@@ -429,6 +424,7 @@ export const ProfilePage: React.FC = () => {
               {/* Test Mode Bypass Button */}
               {isTestMode && (
                 <Button
+                  type="button"
                   onClick={handleTestModeBypass}
                   disabled={loading}
                   fullWidth
