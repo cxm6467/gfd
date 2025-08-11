@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { MatchCard } from '../../components/molecules/MatchCard';
+import { Button } from '../../components/atoms/Button';
 import { MatchService } from '../../services/matchService';
 import { useAuth } from '../../hooks/useAuth';
 import { Match } from '../../types';
