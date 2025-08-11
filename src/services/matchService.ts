@@ -24,6 +24,18 @@ export class MatchService {
   async addLike(currentUserId: string, likedProfile: User): Promise<{ isMatch: boolean; matchId?: string }> {
     console.log('Adding like:', currentUserId, 'likes', likedProfile.id);
     
+    // Check if we already have a match with this user
+    const existingMatches = this.storageService.getMatches();
+    const alreadyMatched = existingMatches.find(match => 
+      match.profile?.id === likedProfile.id || 
+      match.matchedUserId === likedProfile.id.toString()
+    );
+    
+    if (alreadyMatched) {
+      console.log('Already matched with this user');
+      return { isMatch: true, matchId: alreadyMatched.id };
+    }
+    
     // For demo purposes, simulate that some profiles like you back (50% chance)
     const isLikedBack = Math.random() > 0.5;
     

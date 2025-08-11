@@ -4,7 +4,6 @@ import { Heart } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { MatchCard } from '../../components/molecules/MatchCard';
 import { Button } from '../../components/atoms/Button';
-import { mockMatches } from '../../data/mockData';
 import { useMatchesStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -15,13 +14,21 @@ export const MatchesPage: React.FC = () => {
 
   // Convert session storage matches to display format
   const displayMatches = matches.map(match => ({
-    id: match.profile?.id || match.id,
+    id: match.id,
     name: match.profile?.name || 'Unknown',
     lastMessage: match.lastMessage || "You matched! Say hello 👋",
-    time: match.matchedAt ? new Date(match.matchedAt).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }) : 'Just now',
+    time: match.matchedAt ? (() => {
+      const matchTime = new Date(match.matchedAt);
+      const now = new Date();
+      const diffMinutes = Math.floor((now.getTime() - matchTime.getTime()) / (1000 * 60));
+      
+      if (diffMinutes < 1) return 'Just now';
+      if (diffMinutes < 60) return `${diffMinutes}m ago`;
+      const diffHours = Math.floor(diffMinutes / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      const diffDays = Math.floor(diffHours / 24);
+      return `${diffDays}d ago`;
+    })() : 'Just now',
     emoji: match.profile?.emoji || '👤'
   }));
 

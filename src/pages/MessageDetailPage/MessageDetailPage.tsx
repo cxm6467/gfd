@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Send, Settings } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { Avatar } from '../../components/atoms/Avatar';
 import { MessageBubble } from '../../components/molecules/MessageBubble';
 import { mockMessages } from '../../data/mockData';
+import { StorageService } from '../../services/storageService';
 import { useTheme } from '../../hooks/useTheme';
 
 export const MessageDetailPage: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const { theme } = useTheme();
   const [newMessage, setNewMessage] = useState('');
+  const storageService = StorageService.getInstance();
+  
+  // Get match data from session storage
+  const matches = storageService.getMatches();
+  const currentMatch = matches.find(match => match.id === id);
+  
+  // Fallback to mock data if no match found
+  const matchName = currentMatch?.profile?.name || 'Alex';
+  const matchEmoji = currentMatch?.profile?.emoji || '👨‍🍳';
 
   // TODO: Implement real-time messaging with Socket.io
   const handleSendMessage = () => {
@@ -35,9 +46,9 @@ export const MessageDetailPage: React.FC = () => {
                 <ArrowLeft className="h-5 w-5 text-gray-600" />
               </button>
               <div className="flex items-center space-x-3">
-                <Avatar emoji="👨‍🍳" size="sm" />
+                <Avatar emoji={matchEmoji} size="sm" />
                 <div>
-                  <h2 className={`text-lg font-semibold ${theme.colors.text}`}>Alex</h2>
+                  <h2 className={`text-lg font-semibold ${theme.colors.text}`}>{matchName}</h2>
                   <p className="text-sm text-green-500">Online now</p>
                 </div>
               </div>
