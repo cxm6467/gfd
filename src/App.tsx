@@ -1,6 +1,6 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { TestModeBanner } from './components/molecules/TestModeBanner';
 import { useAuth } from './hooks/useAuth';
 import { HomePage } from './pages/HomePage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -38,6 +38,7 @@ function App() {
 
   return (
     <Router>
+      <TestModeBanner />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />

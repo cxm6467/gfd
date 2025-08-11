@@ -1,19 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Logo } from '../../atoms/Logo';
-import { TestModeToggle } from '../../molecules/TestModeToggle';
-import { useTheme } from '../../../hooks/useTheme';
-
-export const Header: React.FC = () => {
-  const { theme } = useTheme();
-  const location = useLocation();
-  
-  // Always show test mode in development
-  const [isTestMode, setIsTestMode] = useState(true);
-
-  const handleTestModeToggle = (enabled: boolean) => {
-    setIsTestMode(enabled);
     localStorage.setItem('VITE_TEST_MODE', enabled.toString());
   };
 
@@ -27,19 +14,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <>
-      {/* Test Mode Banner - Always show in development */}
-      <div className="bg-red-600 text-white px-4 py-3 text-center text-sm font-medium">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span>🧪</span>
-            <span>Test Mode Active - Development Environment</span>
-          </div>
-          <TestModeToggle isTestMode={isTestMode} onToggle={handleTestModeToggle} />
-        </div>
-      </div>
-      
-      <header className={`${theme.colors.surface} shadow-sm border-b ${theme.colors.border}`}>
+    <header className={`${theme.colors.surface} shadow-sm border-b ${theme.colors.border}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Logo />
@@ -63,8 +38,5 @@ export const Header: React.FC = () => {
 
             {/* Mobile Navigation - Bottom Tab Bar will be added later */}
           </div>
-        </div>
-      </header>
-    </>
-  );
+    </header>
 };
