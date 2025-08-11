@@ -125,7 +125,8 @@ export const ProfilePage: React.FC = () => {
       await quickSignIn();
       navigate('/dashboard');
     } catch (error) {
-      setError('Test mode sign in failed');
+      console.error('Test mode sign in error:', error);
+      setError(error instanceof Error ? error.message : 'Test mode sign in failed');
     } finally {
       setLoading(false);
     }
