@@ -7,6 +7,8 @@ import { MatchService } from '../../../services/matchService';
 import { useAuth } from '../../../hooks/useAuth';
 import { Heart, X } from 'lucide-react';
 import { StorageService } from '../../../services/storageService';
+import { Toast } from '../../atoms/Toast';
+import { useToast } from '../../../hooks/useToast';
 
 interface SwipeStackProps {
   profiles: User[];
@@ -18,6 +20,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
   const { user } = useAuth();
   const matchService = MatchService.getInstance();
   const storageService = StorageService.getInstance();
+  const { toast, showToast, hideToast } = useToast();
   
   const [currentIndex, setCurrentIndex] = useState(() => {
     // Try session storage first, then localStorage
@@ -74,9 +77,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
         try {
           const result = await matchService.addLike(user.id, currentProfile);
           if (result.isMatch) {
-            // Show match notification
-            alert(`🎉 It's a match with ${currentProfile.name}! Check your Matches tab.`);
-            // TODO: Replace with proper match notification UI
+            showToast(`🎉 It's a match with ${currentProfile.name}! Check your Matches tab.`);
           }
         } catch (error) {
           console.error('Error adding like:', error);
@@ -209,6 +210,12 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
           </button>
         )}
       </div>
+      
+      <Toast
+        message={toast.message}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </div>
   );
 };
