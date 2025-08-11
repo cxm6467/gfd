@@ -15,12 +15,19 @@ export const HomePage: React.FC = () => {
   
   const [isTestMode, setIsTestMode] = useState(() => {
     const stored = localStorage.getItem('VITE_TEST_MODE');
-    return stored ? stored === 'true' : true; // Default to true for development
+    const envValue = import.meta.env.VITE_TEST_MODE;
+    const windowValue = typeof window !== 'undefined' ? (window as any).__VITE_TEST_MODE__ : null;
+    return stored ? stored === 'true' : (windowValue === 'true' || envValue === 'true' || true); // Default to true for development
   });
 
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
     localStorage.setItem('VITE_TEST_MODE', enabled.toString());
+    
+    // Update the environment variable simulation
+    if (typeof window !== 'undefined') {
+      (window as any).__VITE_TEST_MODE__ = enabled.toString();
+    }
   };
 
   const handleQuickSignIn = async () => {

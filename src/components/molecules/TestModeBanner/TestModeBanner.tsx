@@ -10,6 +10,11 @@ export const TestModeBanner: React.FC = () => {
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
     localStorage.setItem('VITE_TEST_MODE', enabled.toString());
+    
+    // Update the environment variable simulation
+    if (typeof window !== 'undefined') {
+      (window as any).__VITE_TEST_MODE__ = enabled.toString();
+    }
   };
 
   // Always show banner in development

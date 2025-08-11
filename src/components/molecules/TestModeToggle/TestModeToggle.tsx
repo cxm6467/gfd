@@ -18,6 +18,7 @@ export const TestModeToggle: React.FC<TestModeToggleProps> = ({ isTestMode, onTo
     // Update environment variable simulation
     if (typeof window !== 'undefined') {
       localStorage.setItem('VITE_TEST_MODE', newState.toString());
+      (window as any).__VITE_TEST_MODE__ = newState.toString();
     }
     
     // Reset toggling state after animation

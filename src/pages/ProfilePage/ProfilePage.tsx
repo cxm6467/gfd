@@ -22,7 +22,9 @@ export const ProfilePage: React.FC = () => {
   
   const [isTestMode] = useState(() => {
     const stored = localStorage.getItem('VITE_TEST_MODE');
-    return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE === 'true';
+    const envValue = import.meta.env.VITE_TEST_MODE;
+    const windowValue = typeof window !== 'undefined' ? (window as any).__VITE_TEST_MODE__ : null;
+    return stored ? stored === 'true' : (windowValue === 'true' || envValue === 'true');
   });
   
   const [formData, setFormData] = useState({
