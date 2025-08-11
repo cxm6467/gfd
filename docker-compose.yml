@@ -1,102 +1,54 @@
-# GF'd Dating App - Local Development Environment
+# GF'd Dating App - Local Development Services
+# This provides all the infrastructure services for local development
+# Frontend runs via npm/vite, backend is stubbed for future implementation
+
 version: '3.8'
 
 services:
-  # Frontend (React + Vite)
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_TEST_MODE=true
-      - VITE_API_URL=http://localhost:4000
-      - VITE_SUPABASE_URL=http://localhost:54321
-      - VITE_SUPABASE_ANON_KEY=demo_key_replace_with_real
-      - VITE_AUTH0_DOMAIN=demo-domain.auth0.com
-      - VITE_AUTH0_CLIENT_ID=demo_client_id_replace_with_real
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    networks:
-      - gfd-network
-
-  # Backend (Fastify + GraphQL)
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "4000:4000"
-    environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - DATABASE_URL=postgresql://gfd_user:gfd_password@postgres:5432/gfd_db
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=demo_jwt_secret_replace_with_real_256_bit_key
-      - ENCRYPTION_KEY=demo_32_char_key_replace_with_real
-      - SUPABASE_URL=http://supabase:8000
-      - SUPABASE_SERVICE_ROLE_KEY=demo_service_key_replace_with_real
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-    depends_on:
-      - postgres
-      - redis
-      - supabase
-    networks:
-      - gfd-network
-
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
+    container_name: gfd-postgres
     environment:
       - POSTGRES_DB=gfd_db
       - POSTGRES_USER=gfd_user
       - POSTGRES_PASSWORD=gfd_password
+      - POSTGRES_MULTIPLE_DATABASES=gfd_auth,gfd_analytics
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./services/database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./services/database/schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gfd_user -d gfd_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - gfd-network
 
   # Redis Cache & Sessions
   redis:
     image: redis:7-alpine
+    container_name: gfd-redis
     command: redis-server --appendonly yes --requirepass gfd_redis_password
     volumes:
       - redis_data:/data
     ports:
       - "6379:6379"
-    networks:
-      - gfd-network
-
-  # Supabase (Self-hosted for local development)
-  supabase:
-    image: supabase/supabase:latest
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=gfd_db
-      - POSTGRES_USER=gfd_user
-      - POSTGRES_PASSWORD=gfd_password
-      - JWT_SECRET=your_super_secret_jwt_key_for_development
-      - ANON_KEY=your_supabase_anon_key
-      - SERVICE_ROLE_KEY=your_supabase_service_role_key
-    ports:
-      - "54321:8000"
-    depends_on:
-      - postgres
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     networks:
       - gfd-network
 
   # MinIO (S3-compatible file storage)
   minio:
     image: minio/minio:latest
+    container_name: gfd-minio
     command: server /data --console-address ":9001"
     environment:
       - MINIO_ROOT_USER=gfd_minio_user
@@ -106,44 +58,88 @@ services:
     ports:
       - "9000:9000"  # API
       - "9001:9001"  # Console
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
     networks:
       - gfd-network
 
   # MongoDB (for analytics and logs)
   mongodb:
     image: mongo:7
+    container_name: gfd-mongodb
     environment:
       - MONGO_INITDB_ROOT_USERNAME=gfd_mongo_user
       - MONGO_INITDB_ROOT_PASSWORD=gfd_mongo_password
       - MONGO_INITDB_DATABASE=gfd_analytics
     volumes:
       - mongodb_data:/data/db
+      - ./services/mongodb/init.js:/docker-entrypoint-initdb.d/init.js
     ports:
       - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - gfd-network
 
-  # Nginx (Reverse Proxy)
+  # Supabase (Local instance for auth experimentation)
+  supabase-db:
+    image: postgres:15-alpine
+    container_name: gfd-supabase-db
+    environment:
+      - POSTGRES_DB=supabase
+      - POSTGRES_USER=supabase
+      - POSTGRES_PASSWORD=supabase_password
+    volumes:
+      - supabase_data:/var/lib/postgresql/data
+    ports:
+      - "54322:5432"
+    networks:
+      - gfd-network
+
+  # Mailhog (Email testing)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: gfd-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - gfd-network
+
+  # Nginx (Development proxy - optional)
   nginx:
     image: nginx:alpine
-    ports:
-      - "80:80"
-      - "443:443"
+    container_name: gfd-nginx
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl:/etc/nginx/ssl
+      - ./services/nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
     depends_on:
-      - frontend
-      - backend
+      - postgres
+      - redis
+      - minio
     networks:
       - gfd-network
 
 volumes:
   postgres_data:
+    driver: local
   redis_data:
+    driver: local
   minio_data:
+    driver: local
   mongodb_data:
+    driver: local
+  supabase_data:
+    driver: local
 
 networks:
   gfd-network:
     driver: bridge
+    name: gfd-network

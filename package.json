@@ -5,12 +5,8 @@
   "description": "GF'd - A specialized dating platform for the gluten-free community",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:frontend": "vite",
-    "dev:backend": "echo 'Backend will be implemented later' && node -e \"setInterval(() => {}, 1000)\"",
-    "build": "npm run build:frontend && npm run build:backend",
-    "build:frontend": "tsc && vite build",
-    "build:backend": "echo 'Backend build placeholder'",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "preview": "vite preview",
@@ -22,12 +18,12 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prepare": "husky install",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f",
-    "setup": "cp .env.local .env && npm install && npm run docker:up"
-    "skeleton:reset": "npm run docker:down && docker system prune -f && npm run setup",
-    "skeleton:clean": "rm -rf node_modules package-lock.json && npm install"
+    "services:up": "docker-compose up -d",
+    "services:down": "docker-compose down",
+    "services:logs": "docker-compose logs -f",
+    "services:reset": "docker-compose down -v && docker-compose up -d",
+    "setup": "cp .env.local .env && npm install && npm run services:up",
+    "clean": "rm -rf node_modules package-lock.json && npm install"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",

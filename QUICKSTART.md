@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - GF'd
+# 🚀 Quick Start Guide - GF'd Skeleton
 
 ## Prerequisites
 
@@ -12,149 +12,160 @@
 # 1. Clone and setup
 git clone <your-repo-url>
 cd gfd-dating-app
-cp .env.local .env
-
-# 2. Start everything with Docker
-docker-compose up -d
-
-# 3. Install frontend dependencies
-npm install
-
-# 4. Start frontend development server
-npm run dev:frontend
+npm run setup
 ```
 
-**🎉 That's it!** Open http://localhost:5173
+**🎉 That's it!** 
 
-## 🐳 What Docker Gives You
+- **Frontend**: http://localhost:5173
+- **Services Dashboard**: http://localhost:8080
 
-When you run `docker-compose up -d`, you get:
+## 🐳 What You Get
 
-- **PostgreSQL** (localhost:5432) - Main database
+### Infrastructure Services (Docker)
+- **PostgreSQL** (localhost:5432) - Main database with sample schema
 - **Redis** (localhost:6379) - Caching & sessions  
 - **MongoDB** (localhost:27017) - Analytics & logs
-- **MinIO** (localhost:9000/9001) - File storage (S3-compatible)
-- **Supabase** (localhost:54321) - Auth & real-time features
-- **Nginx** (localhost:80) - Reverse proxy
+- **MinIO** (localhost:9000/9001) - S3-compatible file storage
+- **MailHog** (localhost:8025) - Email testing
+- **Nginx** (localhost:8080) - Service dashboard
+
+### Frontend Application
+- **React + TypeScript** - Modern UI framework
+- **Tailwind CSS** - Utility-first styling
+- **Mock data** - Works without backend
+- **Test mode** - Easy development features
 
 ## 🔧 Development Commands
 
 ```bash
-# Frontend only (most common during development)
-npm run dev:frontend
+# Start all infrastructure services
+npm run services:up
 
-# Backend only (if you're working on API)
-npm run dev:backend
-
-# Both frontend and backend
+# Start frontend development
 npm run dev
 
-# Run tests
-npm test
+# View service logs
+npm run services:logs
 
-# Build for production
-npm run build
+# Reset all data
+npm run services:reset
+
+# Stop all services
+npm run services:down
 ```
 
 ## 🧪 Test Mode Features
 
-The app includes a **Test Mode** for easy development:
+The app includes **Test Mode** for easy development:
 
 - **Red banner** at top with toggle switch
-- **Quick sign-in** button (bypasses real auth)
-- **Mock data** for all features
-- **No external API calls** required
-
-Toggle test mode ON/OFF using the switch in the red banner.
+- **Mock authentication** - No real auth required
+- **Sample data** - Pre-populated profiles, matches, messages
+- **Quick sign-in** - Bypass real authentication flows
 
 ## 📱 What You'll See
 
-1. **Homepage** - Landing page with features
-2. **Profile Setup** - Create/edit your profile
+1. **Homepage** - Landing page with features overview
+2. **Profile Setup** - User registration and profile creation
 3. **Dashboard** - Swipe through potential matches
-4. **Matches** - See your mutual matches
-5. **Messages** - Chat with matches
-6. **Restaurants** - Find gluten-free dining options
-7. **Verification** - Verify your account for trust
-
-## 🔐 Auth0 Setup (Optional)
-
-For JWT experimentation:
-
-1. **Create Auth0 account** at [auth0.com](https://auth0.com)
-2. **Create SPA application**
-3. **Configure URLs**:
-   - Callback: `http://localhost:5173/login/callback`
-   - Logout: `http://localhost:5173`
-4. **Update .env**:
-   ```bash
-   VITE_AUTH0_DOMAIN=your-domain.auth0.com
-   VITE_AUTH0_CLIENT_ID=your_client_id
-   ```
+4. **Matches** - View mutual matches
+5. **Messages** - Chat interface with mock conversations
+6. **Restaurants** - Gluten-free restaurant discovery
+7. **Verification** - Account verification system
 
 ## 🗄️ Database Access
 
 ```bash
-# PostgreSQL
-docker-compose exec postgres psql -U gfd_user -d gfd_db
+# PostgreSQL (main database)
+docker exec -it gfd-postgres psql -U gfd_user -d gfd_db
 
-# Redis
-docker-compose exec redis redis-cli
+# Redis (cache)
+docker exec -it gfd-redis redis-cli -a gfd_redis_password
 
-# MongoDB
-docker-compose exec mongodb mongosh -u gfd_mongo_user -p gfd_mongo_password
+# MongoDB (analytics)
+docker exec -it gfd-mongodb mongosh -u gfd_mongo_user -p gfd_mongo_password
 ```
 
-## 📊 Monitoring
+## 📊 Service Dashboards
 
-- **MinIO Console**: http://localhost:9001 (gfd_minio_user / gfd_minio_password)
-- **Supabase Studio**: http://localhost:54321
-- **Backend API**: http://localhost:4000/health
-- **API Docs**: http://localhost:4000/docs
+- **MinIO Console**: http://localhost:9001
+  - Username: `gfd_minio_user`
+  - Password: `gfd_minio_password`
+- **MailHog**: http://localhost:8025 (email testing)
+- **Services Overview**: http://localhost:8080
+
+## 🛠️ Implementation Ready
+
+### What's Stubbed (Ready for Implementation)
+- ✅ **Authentication services** - Auth0, Supabase, custom auth
+- ✅ **Media upload** - Encrypted file storage
+- ✅ **Restaurant API** - Google Places integration
+- ✅ **Payment processing** - Stripe integration
+- ✅ **Verification services** - Photo, ID, location verification
+- ✅ **Real-time messaging** - Socket.io integration
+- ✅ **Analytics** - User behavior tracking
+
+### Implementation Guides
+- **`ROADMAP.md`** - FAANG-level project roadmap
+- **`IMPLEMENTATION_GUIDE.md`** - Step-by-step technical guide
+- **`docs/`** - Complete technical documentation
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Watch mode for development
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+```
 
 ## 🛠️ Troubleshooting
 
-### Common Issues:
-
-**Port conflicts:**
+### Port Conflicts
 ```bash
 # Check what's using ports
-lsof -i :5173
-lsof -i :4000
-lsof -i :5432
+lsof -i :5173  # Frontend
+lsof -i :5432  # PostgreSQL
+lsof -i :6379  # Redis
 ```
 
-**Docker issues:**
+### Reset Everything
 ```bash
-# Reset everything
-docker-compose down -v
-docker-compose up -d
+# Nuclear option - reset all data and containers
+npm run services:down
+docker system prune -f
+npm run setup
 ```
 
-**Dependencies:**
+### Database Issues
 ```bash
-# Clean install
-rm -rf node_modules package-lock.json
-npm install
+# Check database status
+docker exec gfd-postgres pg_isready -U gfd_user -d gfd_db
+
+# View database logs
+docker logs gfd-postgres
 ```
 
-**Database connection:**
-```bash
-# Check database is running
-docker-compose ps
-docker-compose logs postgres
-```
+## 🎯 Next Steps
 
-## 🎯 Ready to Code!
+1. **Explore the frontend** - Everything works with mock data
+2. **Review the roadmap** - `ROADMAP.md` has your implementation plan
+3. **Choose your first milestone** - Start with authentication or matching
+4. **Follow the implementation guide** - Step-by-step instructions
+5. **Build incrementally** - Each service is independent
 
-The project is now fully set up for local development with:
+## 🏗️ Architecture Highlights
 
-- ✅ **Hot reloading** for instant feedback
-- ✅ **Mock data** so no external APIs needed
-- ✅ **Test mode** for easy development
-- ✅ **Complete database** with sample data
-- ✅ **File storage** for media uploads
-- ✅ **Authentication** with JWT inspection
-- ✅ **Real-time features** ready to go
+- **Monorepo structure** - Everything in one place
+- **Docker-first** - Consistent development environment
+- **TypeScript everywhere** - Type safety and great DX
+- **Test-driven** - All components have test stubs
+- **Security-focused** - Encryption and safety built-in
+- **Scalable design** - Microservices-ready architecture
 
-Start coding and see changes instantly! 🚀
+**Ready to build the future of gluten-free dating! 🌾💙**
