@@ -33,7 +33,8 @@ export const ProfilePage: React.FC = () => {
     lastName: user?.lastName || '',
     age: user?.age?.toString() || '',
     location: user?.location || '',
-    dietaryRestrictions: user?.dietaryRestrictions || 'celiac_disease'
+    dietaryRestrictions: user?.dietaryRestrictions || 'celiac_disease',
+    bio: user?.bio || ''
   });
 
   const auth0AuthService = Auth0AuthService.getInstance();
@@ -50,7 +51,8 @@ export const ProfilePage: React.FC = () => {
         lastName: sessionChanges.lastName || user.lastName,
         age: sessionChanges.age?.toString() || user.age.toString(),
         location: sessionChanges.location || user.location,
-        dietaryRestrictions: sessionChanges.dietaryRestrictions || user.dietaryRestrictions
+        dietaryRestrictions: sessionChanges.dietaryRestrictions || user.dietaryRestrictions,
+        bio: sessionChanges.bio || user.bio || ''
       });
       setIsSignUp(false);
     }
@@ -226,9 +228,10 @@ export const ProfilePage: React.FC = () => {
                     Dietary Restrictions
                   </label>
                   <select 
-                    value={user.dietaryRestrictions}
-                    disabled
-                    className={`w-full border ${theme.colors.border} ${theme.borderRadius.sm} px-3 py-2 bg-gray-50`}
+                    name="dietaryRestrictions"
+                    value={formData.dietaryRestrictions}
+                    onChange={handleInputChange}
+                    className={`w-full border ${theme.colors.border} ${theme.borderRadius.sm} px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   >
                     <option value="celiac_disease">Celiac Disease</option>
                     <option value="ncgs">Non-Celiac Gluten Sensitivity</option>
@@ -237,26 +240,50 @@ export const ProfilePage: React.FC = () => {
                   </select>
                 </div>
 
+                <div>
+                  <label className={`block text-sm font-medium ${theme.colors.text} mb-2`}>
+                    Bio
+                  </label>
+                  <textarea
+                    name="bio"
+                    value={formData.bio}
+                    onChange={handleInputChange}
+                    placeholder="Tell others about yourself... (e.g., Celiac since 2018 • Loves baking GF treats)"
+                    rows={3}
+                    maxLength={150}
+                    className={`w-full border ${theme.colors.border} ${theme.borderRadius.sm} px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none`}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {formData.bio.length}/150 characters
+                  </p>
+                </div>
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                  <Button onClick={handleSaveProfile} fullWidth>
+                    Save Profile
+                  </Button>
                   <Button onClick={() => navigate('/dashboard')} fullWidth>
                     Start Matching
                   </Button>
-                  <Button 
-                    onClick={() => setShowJWTInspector(true)}
-                    variant="outline"
-                    fullWidth
-                  >
-                    <Key className="w-4 h-4 mr-2" />
-                    Inspect JWT
-                  </Button>
-                  <Button 
-                    onClick={() => setShowStorageDebugger(true)}
-                    variant="outline"
-                    fullWidth
-                  >
-                    <Database className="w-4 h-4 mr-2" />
-                    Session Data
-                  </Button>
+                  {isTestMode && (
+                    <>
+                      <Button 
+                        onClick={() => setShowJWTInspector(true)}
+                        variant="outline"
+                        fullWidth
+                      >
+                        <Key className="w-4 h-4 mr-2" />
+                        Inspect JWT
+                      </Button>
+                      <Button 
+                        onClick={() => setShowStorageDebugger(true)}
+                        variant="outline"
+                        fullWidth
+                      >
+                        <Database className="w-4 h-4 mr-2" />
+                        Session Data
+                      </Button>
+                    </>
+                  )}
                   <Button 
                     onClick={handleSignOut}
                     variant="outline"

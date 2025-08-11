@@ -13,6 +13,7 @@ export interface User {
   location: string;
   dietaryRestrictions: string;
   profileImage?: string;
+  bio?: string;
   createdAt: Date;
   lastLogin: Date;
   isVerified: boolean;
@@ -37,6 +38,7 @@ export interface SignUpData {
   age: number;
   location: string;
   dietaryRestrictions: string;
+  bio?: string;
 }
 
 export class AuthService {
