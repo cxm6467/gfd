@@ -1,4 +1,5 @@
 import { User, Match } from '../types';
+import { StorageService } from './storageService';
 
 export interface MatchData {
   id: string;
@@ -10,6 +11,7 @@ export interface MatchData {
 
 export class MatchService {
   private static instance: MatchService;
+  private storageService = StorageService.getInstance();
   
   static getInstance(): MatchService {
     if (!MatchService.instance) {
@@ -22,8 +24,11 @@ export class MatchService {
   async addLike(currentUserId: string, likedProfile: User): Promise<{ isMatch: boolean; matchId?: string }> {
     console.log('Adding like:', currentUserId, 'likes', likedProfile.id);
     
-    // Get existing likes from localStorage
+    // Get existing likes from session storage
     const existingLikes = this.getLikes();
+    
+    // Save swipe action to session storage
+    this.storageService.addSwipeAction('like', likedProfile.id.toString());
     
     // Create new like
     const newLike: MatchData = {
@@ -55,6 +60,15 @@ export class MatchService {
       // Add to matches
       await this.addMatch(currentUserId, likedProfile);
       
+      // Save match to session storage
+      this.storageService.addMatch({
+        id: newLike.id,
+        userId: currentUserId,
+        matchedUserId: likedProfile.id.toString(),
+        profile: likedProfile,
+        matchedAt: new Date().toISOString()
+      });
+      
       return { isMatch: true, matchId: newLike.id };
     } else {
       // Just a like, not a match yet
@@ -67,6 +81,19 @@ export class MatchService {
 
   // Get all matches for current user
   async getMatches(userId: string): Promise<Match[]> {
+    // Try to get matches from session storage first
+    const sessionMatches = this.storageService.getMatches();
+    if (sessionMatches.length > 0) {
+      return sessionMatches.map(match => ({
+        id: parseInt(match.id.replace('match_', '')),
+        name: match.profile?.name || 'Unknown',
+        lastMessage: match.lastMessage || "You matched! Say hello 👋",
+        time: this.formatTime(new Date(match.matchedAt)),
+        emoji: match.profile?.emoji || '👤'
+      }));
+    }
+    
+    // Fallback to localStorage
     const likes = this.getLikes();
     const matches = this.getStoredMatches();
     
@@ -101,6 +128,13 @@ export class MatchService {
 
     matches.push(newMatch);
     localStorage.setItem('user_matches', JSON.stringify(matches));
+    
+    // Also save to session storage
+    this.storageService.addMatch({
+      ...newMatch,
+      profile: matchedUser,
+      matchedAt: newMatch.createdAt.toISOString()
+    });
   }
 
   // Helper methods

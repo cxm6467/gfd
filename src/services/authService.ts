@@ -2,6 +2,8 @@
 // This service provides a complete auth system interface for implementation
 // Current implementation uses localStorage for development/testing
 
+import { StorageService } from './storageService';
+
 export interface User {
   id: string;
   email: string;
@@ -41,6 +43,7 @@ export class AuthService {
   private static instance: AuthService;
   private currentUser: User | null = null;
   private authListeners: ((user: User | null) => void)[] = [];
+  private storageService = StorageService.getInstance();
 
   static getInstance(): AuthService {
     if (!AuthService.instance) {
@@ -95,6 +98,13 @@ export class AuthService {
     // Set current user
     this.setCurrentUser(user, tokens);
 
+    // Save profile to session storage
+    this.storageService.saveProfileChanges({
+      userId: user.id,
+      profileData: user,
+      createdAt: new Date().toISOString()
+    });
+
     return { user, tokens };
   }
 
@@ -126,6 +136,9 @@ export class AuthService {
 
     // Set current user
     this.setCurrentUser(user, tokens);
+
+    // Save login to session storage
+    this.storageService.updateProfileField('lastLogin', new Date().toISOString());
 
     return { user, tokens };
   }
@@ -175,6 +188,14 @@ export class AuthService {
     // Set current user
     this.setCurrentUser(testUser, tokens);
 
+    // Save test user to session storage
+    this.storageService.saveProfileChanges({
+      userId: testUser.id,
+      profileData: testUser,
+      testMode: true,
+      createdAt: new Date().toISOString()
+    });
+
     return { user: testUser, tokens };
   }
 
@@ -223,6 +244,14 @@ export class AuthService {
     this.updateUser(updatedUser);
     this.setCurrentUser(updatedUser);
 
+    // Save profile changes to session storage
+    this.storageService.saveProfileChanges({
+      userId: updatedUser.id,
+      profileData: updatedUser,
+      changes: updates,
+      updatedAt: new Date().toISOString()
+    });
+
     return updatedUser;
   }
 
@@ -242,6 +271,9 @@ export class AuthService {
         
         // Update user profile with image
         this.updateProfile({ profileImage: imageUrl });
+        
+        // Save image upload to session storage
+        this.storageService.updateProfileField('profileImage', imageUrl);
         
         resolve(imageUrl);
       };
@@ -352,6 +384,7 @@ export class AuthService {
     localStorage.removeItem('auth_tokens');
     localStorage.removeItem('app_users');
     localStorage.removeItem('app_passwords');
+    this.storageService.clearAllData();
     this.currentUser = null;
     this.notifyAuthListeners(null);
   }
@@ -359,5 +392,24 @@ export class AuthService {
   // Get all users (for testing/admin)
   getAllUsers(): User[] {
     return this.getStoredUsers();
+  }
+
+  // Session storage utilities
+  getSessionData(): any {
+    return {
+      matches: this.storageService.getMatches(),
+      profileChanges: this.storageService.getProfileChanges(),
+      userPreferences: this.storageService.getUserPreferences(),
+      swipeHistory: this.storageService.getSwipeHistory(),
+      storageInfo: this.storageService.getStorageInfo()
+    };
+  }
+
+  exportSessionData(): string {
+    return this.storageService.exportData();
+  }
+
+  importSessionData(jsonData: string): void {
+    this.storageService.importData(jsonData);
   }
 }

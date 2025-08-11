@@ -6,6 +6,7 @@ import { Button } from '../../atoms/Button';
 import { MatchService } from '../../../services/matchService';
 import { useAuth } from '../../../hooks/useAuth';
 import { Heart, X } from 'lucide-react';
+import { StorageService } from '../../../services/storageService';
 
 interface SwipeStackProps {
   profiles: User[];
@@ -16,13 +17,24 @@ interface SwipeStackProps {
 export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass }) => {
   const { user } = useAuth();
   const matchService = MatchService.getInstance();
+  const storageService = StorageService.getInstance();
   
   const [currentIndex, setCurrentIndex] = useState(() => {
+    // Try session storage first, then localStorage
+    const sessionState = storageService.getAppState();
+    if (sessionState.currentIndex !== undefined) {
+      return sessionState.currentIndex;
+    }
     const saved = localStorage.getItem('swipe_current_index');
     return saved ? parseInt(saved, 10) : 0;
   });
   
   const [removedProfiles, setRemovedProfiles] = useState<Set<number>>(() => {
+    // Try session storage first, then localStorage
+    const sessionState = storageService.getAppState();
+    if (sessionState.removedProfiles) {
+      return new Set(sessionState.removedProfiles);
+    }
     const saved = localStorage.getItem('swipe_removed_profiles');
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
@@ -30,10 +42,24 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
   // Persist state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('swipe_current_index', currentIndex.toString());
+    // Also save to session storage
+    const appState = storageService.getAppState();
+    storageService.saveAppState({
+      ...appState,
+      currentIndex,
+      lastUpdated: new Date().toISOString()
+    });
   }, [currentIndex]);
 
   useEffect(() => {
     localStorage.setItem('swipe_removed_profiles', JSON.stringify([...removedProfiles]));
+    // Also save to session storage
+    const appState = storageService.getAppState();
+    storageService.saveAppState({
+      ...appState,
+      removedProfiles: [...removedProfiles],
+      lastUpdated: new Date().toISOString()
+    });
   }, [removedProfiles]);
 
   // Filter out profiles that have been swiped

@@ -1,15 +1,17 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Heart, Mail, Lock, MapPin, Calendar, Key } from 'lucide-react';
+import { User, Heart, Mail, Lock, MapPin, Calendar, Key, Database } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { Button } from '../../components/atoms/Button';
 import { ProfileImageUpload } from '../../components/molecules/ProfileImageUpload';
 import { JWTInspector } from '../../components/organisms/JWTInspector';
+import { SessionStorageDebugger } from '../../components/organisms/SessionStorageDebugger';
 import { Auth0AuthService } from '../../services/auth0AuthService';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../hooks/useTheme';
 import { useTestMode } from '../../hooks/useTestMode';
+import { StorageService } from '../../services/storageService';
 
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +19,10 @@ export const ProfilePage: React.FC = () => {
   const { user, signIn, signUp, signOut, quickSignIn, isAuthenticated } = useAuth();
   const { isTestMode } = useTestMode();
   
+  const storageService = StorageService.getInstance();
   const [isSignUp, setIsSignUp] = useState(!isAuthenticated);
   const [showJWTInspector, setShowJWTInspector] = useState(false);
+  const [showStorageDebugger, setShowStorageDebugger] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -36,24 +40,33 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
+      // Load any pending profile changes from session storage
+      const sessionChanges = storageService.getProfileChanges();
+      
       setFormData({
-        email: user.email,
+        email: sessionChanges.email || user.email,
         password: '',
-        firstName: user.firstName,
-        lastName: user.lastName,
-        age: user.age.toString(),
-        location: user.location,
-        dietaryRestrictions: user.dietaryRestrictions
+        firstName: sessionChanges.firstName || user.firstName,
+        lastName: sessionChanges.lastName || user.lastName,
+        age: sessionChanges.age?.toString() || user.age.toString(),
+        location: sessionChanges.location || user.location,
+        dietaryRestrictions: sessionChanges.dietaryRestrictions || user.dietaryRestrictions
       });
       setIsSignUp(false);
     }
   }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+    
+    // Save changes to session storage as user types
+    if (user) {
+      storageService.updateProfileField(name, name === 'age' ? parseInt(value) : value);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,6 +94,8 @@ export const ProfilePage: React.FC = () => {
 
   const handleImageUploaded = (imageUrl: string) => {
     console.log('Profile image uploaded:', imageUrl);
+    // Save image to session storage
+    storageService.updateProfileField('profileImage', imageUrl);
     // Image is automatically saved to user profile via auth service
   };
 
@@ -235,6 +250,14 @@ export const ProfilePage: React.FC = () => {
                     Inspect JWT
                   </Button>
                   <Button 
+                    onClick={() => setShowStorageDebugger(true)}
+                    variant="outline"
+                    fullWidth
+                  >
+                    <Database className="w-4 h-4 mr-2" />
+                    Session Data
+                  </Button>
+                  <Button 
                     onClick={handleSignOut}
                     variant="outline"
                     fullWidth
@@ -248,6 +271,11 @@ export const ProfilePage: React.FC = () => {
             <JWTInspector 
               isOpen={showJWTInspector} 
               onClose={() => setShowJWTInspector(false)} 
+            />
+            
+            <SessionStorageDebugger 
+              isOpen={showStorageDebugger} 
+              onClose={() => setShowStorageDebugger(false)} 
             />
           </div>
         </div>
