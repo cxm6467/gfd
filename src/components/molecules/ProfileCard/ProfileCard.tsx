@@ -125,6 +125,15 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             <p className="text-amber-600 font-medium mb-2 text-sm uppercase tracking-wide">{profile.dietaryInfo}</p>
             <p className={`${theme.colors.textSecondary} mb-6`}>{profile.location}</p>
             
+            {/* Bio Section */}
+            {profile.bio && (
+              <div className={`bg-white/80 backdrop-blur-sm ${theme.borderRadius.md} ${theme.spacing.sm} mb-4 border border-slate-200`}>
+                <p className={`${theme.colors.text} text-sm leading-relaxed font-medium text-center`}>
+                  {profile.bio}
+                </p>
+              </div>
+            )}
+            
             <div className={`bg-white/80 backdrop-blur-sm ${theme.borderRadius.md} ${theme.spacing.md} mb-8 border border-slate-200`}>
               <p className={`${theme.colors.text} leading-relaxed font-light`}>
                 {profile.description}
