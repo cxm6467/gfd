@@ -26,6 +26,8 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "setup": "cp .env.local .env && npm install && npm run docker:up"
+    "skeleton:reset": "npm run docker:down && docker system prune -f && npm run setup",
+    "skeleton:clean": "rm -rf node_modules package-lock.json && npm install"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",

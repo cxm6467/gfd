@@ -1,5 +1,6 @@
-// Local Authentication Service - Open Source & Mockable
-// This service provides a complete auth system that works offline and can be easily mocked
+// TODO: Authentication Service - Implement with your preferred provider
+// This service provides a complete auth system interface for implementation
+// Current implementation uses localStorage for development/testing
 
 export interface User {
   id: string;
@@ -55,7 +56,7 @@ export class AuthService {
 
   // Sign up with email and password
   async signUp(data: SignUpData): Promise<{ user: User; tokens: AuthTokens }> {
-    console.log('Signing up user:', data.email);
+    console.log('TODO: Implement real signup - currently using mock data for:', data.email);
 
     // Validate input
     this.validateSignUpData(data);
@@ -99,7 +100,7 @@ export class AuthService {
 
   // Sign in with email and password
   async signIn(credentials: LoginCredentials): Promise<{ user: User; tokens: AuthTokens }> {
-    console.log('Signing in user:', credentials.email);
+    console.log('TODO: Implement real signin - currently using mock data for:', credentials.email);
 
     const users = this.getStoredUsers();
     const user = users.find(u => u.email === credentials.email);
@@ -131,7 +132,7 @@ export class AuthService {
 
   // Quick sign in for test mode
   async quickSignIn(): Promise<{ user: User; tokens: AuthTokens }> {
-    console.log('Quick sign in for test mode');
+    console.log('TODO: Remove quick sign in before production - test mode only');
 
     // Create or get test user
     let testUser = this.getStoredUsers().find(u => u.email === 'test@gfd.com');

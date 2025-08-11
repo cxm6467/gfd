@@ -8,10 +8,10 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { mediaRoutes } from './routes/media';
 
-// TODO: Import GraphQL Apollo Server integration
-// TODO: Import authentication middleware
-// TODO: Import database connection (Prisma)
-// TODO: Import route handlers
+// TODO: IMPLEMENTATION REQUIRED - Import GraphQL Apollo Server integration
+// TODO: IMPLEMENTATION REQUIRED - Import authentication middleware  
+// TODO: IMPLEMENTATION REQUIRED - Import database connection (Prisma)
+// TODO: IMPLEMENTATION REQUIRED - Import route handlers
 
 const fastify = Fastify({
   logger: {
@@ -78,17 +78,21 @@ await fastify.register(swaggerUi, {
 
 // Health check endpoint
 fastify.get('/health', async (request, reply) => {
-  return { status: 'ok', timestamp: new Date().toISOString() };
+  return { 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    message: 'TODO: Add real health checks for database, redis, etc.'
+  };
 });
 
-// TODO: Register GraphQL endpoint
-// TODO: Register authentication routes
-// TODO: Register profile service routes
-// TODO: Register messaging routes
+// TODO: IMPLEMENTATION REQUIRED - Register GraphQL endpoint
+// TODO: IMPLEMENTATION REQUIRED - Register authentication routes
+// TODO: IMPLEMENTATION REQUIRED - Register profile service routes
+// TODO: IMPLEMENTATION REQUIRED - Register messaging routes
 // Register media upload routes
 await fastify.register(mediaRoutes, { prefix: '/api/media' });
-// TODO: Register payment routes
-// TODO: Register restaurant API routes
+// TODO: IMPLEMENTATION REQUIRED - Register payment routes
+// TODO: IMPLEMENTATION REQUIRED - Register restaurant API routes
 
 const start = async () => {
   try {

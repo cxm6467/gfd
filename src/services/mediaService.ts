@@ -1,5 +1,6 @@
-// TODO: Implement encrypted media upload service
-// This service handles secure upload, encryption, and processing of media files
+// TODO: Media Service - Implement with your preferred storage provider (AWS S3, CloudFlare R2, etc.)
+// This service provides the interface for secure media handling
+// Current implementation is mocked for development
 
 export interface MediaFile {
   id: string;
@@ -57,7 +58,7 @@ export class MediaService {
     userId: string,
     options: MediaUploadOptions = {}
   ): Promise<MediaFile> {
-    console.log('Uploading media file:', file.name, 'for user:', userId);
+    console.log('TODO: Implement real media upload - currently mocked for:', file.name, 'user:', userId);
 
     // Validate file type and size
     this.validateFile(file, options);
@@ -109,7 +110,7 @@ export class MediaService {
     mediaId: string,
     userId: string
   ): Promise<{ url: string; expiresAt: Date } | null> {
-    console.log('Requesting decrypted media:', mediaId, 'for user:', userId);
+    console.log('TODO: Implement real media decryption - currently mocked for:', mediaId, 'user:', userId);
 
     // TODO: Verify user authorization to access media
     const hasAccess = await this.verifyMediaAccess(mediaId, userId);

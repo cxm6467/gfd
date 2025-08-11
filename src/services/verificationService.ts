@@ -1,5 +1,6 @@
-// TODO: Implement comprehensive verification service
+// TODO: Verification Service - Implement with AI verification providers
 // This service handles photo, ID, and location verification
+// Current implementation is mocked for development
 
 import { VerificationStatus } from '../types';
 import { mockVerifications } from '../data/mockData';
@@ -27,9 +28,9 @@ export class VerificationService {
 
   // TODO: Implement photo verification with AI face matching
   async submitPhotoVerification(data: PhotoVerificationData): Promise<string> {
-    console.log('Submitting photo verification');
+    console.log('TODO: Implement real photo verification - currently mocked');
     
-    // Mock implementation - in production:
+    // TODO: Replace with real implementation:
     // 1. Upload photos to secure storage
     // 2. Use AI service (AWS Rekognition, Azure Face API) for face matching
     // 3. Store verification request in database
@@ -45,9 +46,9 @@ export class VerificationService {
 
   // TODO: Implement ID verification with document scanning
   async submitIDVerification(data: IDVerificationData): Promise<string> {
-    console.log('Submitting ID verification');
+    console.log('TODO: Implement real ID verification - currently mocked');
     
-    // Mock implementation - in production:
+    // TODO: Replace with real implementation:
     // 1. Upload ID photos to secure storage
     // 2. Use OCR service to extract information
     // 3. Verify against government databases (where legally allowed)

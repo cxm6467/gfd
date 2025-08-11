@@ -1,5 +1,6 @@
-// TODO: Implement restaurant discovery service with real API integration
-// Currently using mock data, but structured for easy API integration
+// TODO: Restaurant Service - Integrate with Google Places API, Yelp API, etc.
+// This service provides restaurant discovery and gluten-free information
+// Current implementation uses mock data for development
 
 import { Restaurant } from '../types';
 import { mockRestaurants } from '../data/mockData';
@@ -30,9 +31,9 @@ export class RestaurantService {
     longitude: number, 
     filters: RestaurantFilters = {}
   ): Promise<Restaurant[]> {
-    console.log('Finding restaurants near:', { latitude, longitude, filters });
+    console.log('TODO: Implement real restaurant API - currently using mock data for:', { latitude, longitude, filters });
     
-    // Mock implementation - in production, integrate with:
+    // TODO: Replace with real API integration:
     // - Google Places API for restaurant data
     // - Yelp API for reviews and ratings
     // - Custom gluten-free database for safety ratings

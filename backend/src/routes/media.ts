@@ -1,8 +1,9 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { MediaService } from '../services/mediaService';
 
-// TODO: Implement media upload routes for Fastify backend
+// TODO: IMPLEMENTATION REQUIRED - Implement media upload routes for Fastify backend
 // This module handles encrypted media upload endpoints
+// Current implementation is stubbed for development
 
 interface MediaUploadRequest extends FastifyRequest {
   body: {
@@ -65,10 +66,10 @@ export async function mediaRoutes(fastify: FastifyInstance) {
     },
   }, async (request: MediaUploadRequest, reply: FastifyReply) => {
     try {
-      // TODO: Validate JWT token and user permissions
+      // TODO: IMPLEMENTATION REQUIRED - Validate JWT token and user permissions
       const userId = request.body.userId;
       
-      // TODO: Process multipart file upload
+      // TODO: IMPLEMENTATION REQUIRED - Process multipart file upload
       const files = await request.saveRequestFiles();
       
       if (!files || files.length === 0) {

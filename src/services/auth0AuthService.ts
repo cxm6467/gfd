@@ -43,6 +43,7 @@ export class Auth0AuthService {
   // Sign in with Auth0
   async signIn(): Promise<void> {
     try {
+      console.log('TODO: Configure Auth0 domain and client ID in environment variables');
       const auth0 = await getAuth0Client();
       await auth0.loginWithRedirect();
     } catch (error) {
@@ -54,6 +55,7 @@ export class Auth0AuthService {
   // Handle callback after OAuth redirect
   async handleCallback(): Promise<void> {
     try {
+      console.log('TODO: Ensure Auth0 callback URL is configured correctly');
       const auth0 = await getAuth0Client();
       await auth0.handleRedirectCallback();
       await this.loadUserFromAuth0();

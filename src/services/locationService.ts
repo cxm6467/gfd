@@ -1,5 +1,6 @@
-// TODO: Implement location verification service
-// This service will handle location-based features and verification
+// TODO: Location Service - Implement with geolocation and geocoding APIs
+// This service handles location-based features and verification
+// Current implementation uses browser geolocation with mock fallbacks
 
 export interface LocationPermission {
   granted: boolean;
@@ -20,7 +21,7 @@ export class LocationService {
   async getCurrentLocation(): Promise<{ latitude: number; longitude: number } | null> {
     return new Promise((resolve) => {
       if (!navigator.geolocation) {
-        console.warn('Geolocation not supported');
+        console.warn('TODO: Handle geolocation not supported - implement fallback');
         resolve(null);
         return;
       }
@@ -33,8 +34,8 @@ export class LocationService {
           });
         },
         (error) => {
-          console.error('Location error:', error);
-          // Return mock San Francisco location for demo
+          console.error('TODO: Handle location error properly:', error);
+          // TODO: Remove mock location - currently returning SF for demo
           resolve({
             latitude: 37.7749,
             longitude: -122.4194
