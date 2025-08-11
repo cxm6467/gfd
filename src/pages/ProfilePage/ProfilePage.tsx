@@ -20,6 +20,11 @@ export const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  const [isTestMode] = useState(() => {
+    const stored = localStorage.getItem('VITE_TEST_MODE');
+    return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE === 'true';
+  });
+  
   const [formData, setFormData] = useState({
     email: user?.email || '',
     password: '',
@@ -112,6 +117,17 @@ export const ProfilePage: React.FC = () => {
       await auth0AuthService.signIn();
     } catch (error) {
       setError('Auth0 sign in failed');
+    }
+  };
+  const handleTestModeBypass = async () => {
+    try {
+      setLoading(true);
+      await quickSignIn();
+      navigate('/dashboard');
+    } catch (error) {
+      setError('Test mode sign in failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -406,6 +422,18 @@ export const ProfilePage: React.FC = () => {
               >
                 {loading ? 'Please wait...' : (isSignUp ? 'Create Account & Start Matching' : 'Sign In')}
               </Button>
+
+              {/* Test Mode Bypass Button */}
+              {isTestMode && (
+                <Button
+                  onClick={handleTestModeBypass}
+                  disabled={loading}
+                  fullWidth
+                  className="bg-pink-500 hover:bg-pink-600 text-white"
+                >
+                  🧪 Test Mode: Skip Sign In
+                </Button>
+              )}
 
               {/* Okta OAuth Option */}
               <div className="relative my-6">
