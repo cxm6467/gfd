@@ -1,15 +1,11 @@
 import React from 'react';
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { TestModeBanner } from '../../molecules/TestModeBanner';
 import { Logo } from '../../atoms/Logo';
+import { useTheme } from '../../../hooks/useTheme';
 
-export const Header = ({ theme }) => {
+export const Header = () => {
   const location = useLocation();
-  
-  const toggleTestMode = (enabled) => {
-    localStorage.setItem('VITE_TEST_MODE', enabled.toString());
-  };
+  const { theme } = useTheme();
 
   const navItems = [
     { path: '/dashboard', label: 'Discover' },
