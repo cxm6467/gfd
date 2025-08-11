@@ -48,3 +48,4 @@ export const Header = ({ theme }) => {
         </div>
     </header>
   );
+};
