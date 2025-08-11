@@ -17,7 +17,8 @@ export class StorageService {
     USER_PREFERENCES: 'gfd_user_preferences',
     SWIPE_HISTORY: 'gfd_swipe_history',
     CONVERSATION_STATE: 'gfd_conversation_state',
-    APP_STATE: 'gfd_app_state'
+    APP_STATE: 'gfd_app_state',
+    AI_MESSAGES: 'gfd_ai_messages'
   };
 
   static getInstance(): StorageService {
@@ -167,6 +168,24 @@ export class StorageService {
 
   getAppState(): any {
     return this.getItem(this.STORAGE_KEYS.APP_STATE) || {};
+  }
+
+  // AI Messages methods
+  saveAIMessages(conversationId: string, messages: any[]): void {
+    const allAIMessages = this.getItem(this.STORAGE_KEYS.AI_MESSAGES) || {};
+    allAIMessages[conversationId] = messages;
+    this.setItem(this.STORAGE_KEYS.AI_MESSAGES, allAIMessages);
+  }
+
+  getAIMessages(conversationId: string): any[] {
+    const allAIMessages = this.getItem(this.STORAGE_KEYS.AI_MESSAGES) || {};
+    return allAIMessages[conversationId] || [];
+  }
+
+  addAIMessage(conversationId: string, message: any): void {
+    const existingMessages = this.getAIMessages(conversationId);
+    const updatedMessages = [...existingMessages, message];
+    this.saveAIMessages(conversationId, updatedMessages);
   }
 
   // Utility methods

@@ -98,7 +98,13 @@ export const ProfilePage: React.FC = () => {
     console.log('Profile image uploaded:', imageUrl);
     // Save image to session storage
     storageService.updateProfileField('profileImage', imageUrl);
-    // Image is automatically saved to user profile via auth service
+    
+    // Update user profile with new image
+    if (user) {
+      const updatedUser = { ...user, profileImage: imageUrl };
+      // Update auth service user data
+      // This would normally update the database in production
+    }
   };
 
   const handleImageUploadError = (error: string) => {
