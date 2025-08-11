@@ -62,13 +62,15 @@ npm run services:down
 
 ## 🧪 Test Mode Features
 
-The app includes **Test Mode** for easy development:
+The app includes comprehensive **Test Mode** for easy development:
 
-- **Red banner** at top with toggle switch
+- **Dynamic banner** - Shows current test mode status with toggle switch
 - **Mock authentication** - No real auth required
 - **Sample data** - Pre-populated profiles, matches, messages
-- **Quick sign-in** - Bypass real authentication flows
 
+- **Session storage** - All user data persists in browser session
+- **AI messaging** - Smart conversation suggestions with moderation
+- **Profile editing** - Full profile management with bio editing
 ## 📱 What You'll See
 
 1. **Homepage** - Landing page with features overview

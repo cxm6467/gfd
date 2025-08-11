@@ -27,6 +27,14 @@ The skeleton includes comprehensive test mode functionality:
 - Quick sign-in bypasses real authentication
 - Mock data populates all features
 
+### Test Mode Features
+- **Dynamic banner** - Shows test mode status with toggle switch
+- **Mock authentication** - Quick sign-in bypass
+- **Sample data** - Pre-populated profiles, matches, messages
+- **Service stubs** - All external APIs mocked for development
+- **Session storage** - Persistent data across browser sessions
+- **AI messaging** - Smart suggestions and content moderation
+
 ### **Test Mode Benefits**
 - **No API keys required** - Everything works with mocks
 - **Instant development** - No external service setup needed

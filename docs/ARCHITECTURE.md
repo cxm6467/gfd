@@ -95,9 +95,9 @@ Load Balancer
 
 ### WebSocket Connections
 - **Message delivery**
+- **AI message suggestions**
 - **Typing indicators**
 - **Online status**
-- **Match notifications**
 
 ### Push Notifications
 - **Firebase integration**

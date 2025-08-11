@@ -29,6 +29,9 @@ Comprehensive testing strategy ensuring reliability, security, and user experien
 ### Frontend Testing
 
 #### Component Tests
+- **Profile management** - Bio editing, image upload, session storage
+- **AI messaging** - Smart suggestions, content moderation
+- **Test mode features** - Debug buttons, banner updates
 ```typescript
 // Example: Button component test
 describe('Button Component', () => {
@@ -68,6 +71,9 @@ describe('User Resolver', () => {
 ```
 
 #### Service Tests
+- **Session storage** - Data persistence, import/export
+- **AI moderation** - Content filtering, suggestion generation
+- **Profile management** - CRUD operations, validation
 ```typescript
 // Example: MediaService test
 describe('MediaService', () => {
@@ -81,6 +87,8 @@ describe('MediaService', () => {
 ### Security Testing
 
 #### Authentication Tests
+- **Session management** - Data persistence, security
+- **Content moderation** - AI filtering, safety checks
 - **JWT token validation**
 - **Session management**
 - **Rate limiting enforcement**
