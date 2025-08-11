@@ -80,8 +80,8 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
           const result = await matchService.addLike(user.id, currentProfile);
           if (result.isMatch) {
             showToast(
-              `🎉 It's a match with ${currentProfile.name}! Click to view matches.`,
-              () => navigate('/matches')
+              `🎉 It's a match with ${currentProfile.name}! Click to start chatting.`,
+              () => navigate(`/messages/${result.matchId}`)
             );
           }
         } catch (error) {
