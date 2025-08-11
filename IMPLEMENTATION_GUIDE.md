@@ -365,28 +365,6 @@ npm install socket.io-client
 
 ---
 
-## 🛠️ Development Commands
-
-```bash
-# Start all infrastructure services
-npm run services:up
-
-# Start frontend development
-npm run dev
-
-# Quality checks (run automatically via git hooks)
-npm run lint          # ESLint checking
-npm run lint:fix      # Auto-fix linting issues
-npm run typecheck     # TypeScript type checking
-npm test              # Run test suite
-npm run test:coverage # Test coverage report
-
-# View service logs
-npm run services:logs
-```
-
----
-
 ## 📋 Implementation Priority Matrix
 
 ### Week 1-2: Foundation
@@ -425,6 +403,20 @@ npm run services:logs
 - **TypeScript interfaces** for all data structures
 - **Test stubs** for guidance
 - **Docker setup** for consistent environment
+
+### **Implementation Cycle**
+1. **Pick a milestone** from `ROADMAP.md`
+2. **Read implementation guide** for that service
+3. **Write tests first** (TDD approach)
+4. **Implement the service** replacing TODO sections
+5. **Test thoroughly** with real and edge case data
+6. **Update documentation** as needed
+7. **Commit with conventional format**:
+   ```bash
+   git commit -m "feat(auth): implement JWT token validation"
+   git commit -m "fix(ui): resolve mobile navigation overflow"
+   git commit -m "test(matching): add compatibility algorithm tests"
+   ```
 
 ### Best Practices
 - **Start with tests** - Write tests first for critical components
