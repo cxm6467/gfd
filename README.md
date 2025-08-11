@@ -1,128 +1,144 @@
-# GF'd - Gluten-Free Dating Platform (Skeleton)
+# GF'd - Gluten-Free Dating Platform
 
-A production-ready skeleton for a sophisticated dating platform designed for the gluten-free community. Complete with FAANG-level architecture, comprehensive documentation, and implementation roadmap.
+A production-ready dating platform designed specifically for the gluten-free community, including individuals with celiac disease, non-celiac gluten sensitivity, and lifestyle choices.
 
-## 🏗️ Project Status: Implementation Skeleton
+## 🌟 Features
 
-**✅ What's Complete:**
-- Frontend application with all pages and components
-- Complete database schema design and documentation
-- Docker infrastructure for all services
-- Comprehensive test framework with stubs
-- FAANG-level project roadmap and implementation guides
-- Production-ready architecture and security design
+### Core Dating Features
+- **Intelligent Matching** - Compatibility based on dietary restrictions and lifestyle
+- **Secure Messaging** - End-to-end encrypted conversations
+- **Profile Verification** - Photo, ID, and location verification system
+- **Restaurant Discovery** - Curated gluten-free dining recommendations
+- **Safety First** - Comprehensive reporting and moderation tools
 
-**⚠️ What's Stubbed (Ready for Implementation):**
-- Backend API services (interfaces defined)
-- External integrations (Auth0, Stripe, Google Places)
-- Real-time messaging (Socket.io)
-- Payment processing (Stripe)
-- File storage (S3/MinIO)
+### Gluten-Free Specific
+- **Dietary Compatibility** - Match based on celiac diagnosis and sensitivity levels
+- **Cross-Contamination Awareness** - Filter by preparation safety requirements
+- **Restaurant Safety Ratings** - Community-driven safety assessments
+- **Medical Verification** - Optional celiac diagnosis verification
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Docker and Docker Compose installed
-- Node.js 20+ installed
-- Git
+- **Node.js 20+** - [Download here](https://nodejs.org/)
+- **Docker & Docker Compose** - [Download here](https://www.docker.com/products/docker-desktop/)
+- **Git** - [Download here](https://git-scm.com/)
 
 ### 30-Second Setup
-
-1. **Clone the repository**
 ```bash
+# Clone and setup
 git clone <repository-url>
 cd gfd-dating-app
-```
-
-2. **Setup and start**
-```bash
 npm run setup
+
+# Start development
+npm run dev
 ```
 
-3. **Access the application**
-- **Frontend**: http://localhost:5173
-- **Services Dashboard**: http://localhost:8080
-- **Database**: localhost:5432
-- **Redis**: localhost:6379
-- **MinIO Console**: http://localhost:9001
-- **Email Testing**: http://localhost:8025
+**🎉 Access the app at http://localhost:5173**
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
-This is a **monorepo skeleton** with:
-
-### Frontend (Complete)
-- **React 18+ with TypeScript** - Modern UI framework
-- **Tailwind CSS** - Utility-first styling
-- **Atomic Design** - Scalable component architecture
-- **Mock data** - Fully functional without backend
-- **Test mode** - Development-friendly features
+### Technology Stack
+- **Frontend**: React 18+ with TypeScript, Tailwind CSS
+- **Backend**: Node.js with Fastify, GraphQL, Prisma ORM
+- **Database**: PostgreSQL with Redis caching
+- **Authentication**: Supabase Auth with JWT tokens
+- **File Storage**: Encrypted media storage (S3/MinIO)
+- **Real-time**: Socket.io for messaging
+- **Payments**: Stripe integration
 
 ### Infrastructure Services (Docker)
-- **PostgreSQL** - Main database with schema
-- **Redis** - Caching and session storage
-- **MongoDB** - Analytics and logging
-- **MinIO** - S3-compatible file storage
-- **MailHog** - Email testing service
-- **Nginx** - Development service dashboard
-
-### Backend (Stubbed)
-- **Service interfaces** - Complete TypeScript definitions
-- **Implementation guides** - Step-by-step instructions
-- **Architecture documentation** - FAANG-level design
-- **Security framework** - Encryption and safety design
-
-## 📋 Implementation Roadmap
-
-Follow the comprehensive roadmap in `ROADMAP.md`:
-
-### Phase 1: Foundation (Weeks 1-2)
-- Authentication service implementation
-- Database operations
-- Basic API endpoints
-
-### Phase 2: Core Features (Weeks 3-6)
-- User profiles and matching
-- Real-time messaging
-- Restaurant integration
-
-### Phase 3: Premium Features (Weeks 7-10)
-- Payment processing
-- Advanced matching algorithms
-- Verification services
-
-### Phase 4: Scale & Polish (Weeks 11+)
-- Performance optimization
-- Mobile applications
-- Advanced AI features
+- **PostgreSQL** (localhost:5432) - Main database
+- **Redis** (localhost:6379) - Caching & sessions
+- **MongoDB** (localhost:27017) - Analytics & logs
+- **MinIO** (localhost:9000/9001) - S3-compatible storage
+- **MailHog** (localhost:8025) - Email testing
+- **Nginx** (localhost:8080) - Service dashboard
 
 ## 🧪 Development Mode
 
 The application includes comprehensive development features:
 
-- **Test mode toggle** - Red banner with iPhone-style switch
-- **Mock authentication** - Quick sign-in for testing
+### Test Mode
+- **Toggle switch** in red banner - Enable/disable test features
+- **Mock authentication** - Quick sign-in bypass
 - **Sample data** - Pre-populated profiles, matches, messages
 - **Service stubs** - All external APIs mocked
-- **Hot reloading** - Instant feedback during development
 
-## 📚 Documentation
+### Development Commands
+```bash
+# Start all infrastructure services
+npm run services:up
 
-Comprehensive documentation included:
+# Start frontend development
+npm run dev
 
-- **`ROADMAP.md`** - FAANG-level project roadmap with milestones
-- **`IMPLEMENTATION_GUIDE.md`** - Step-by-step technical implementation
-- **`docs/`** - Complete technical documentation
-  - API design and GraphQL schema
-  - Database schema and optimization
-  - Security guidelines and compliance
-  - Testing strategy and coverage
-  - Deployment and infrastructure
+# Run quality checks
+npm run lint
+npm run typecheck
+npm test
 
-## 🧪 Testing Framework
+# View service logs
+npm run services:logs
 
-Complete testing setup with stubs:
+# Reset all data
+npm run services:reset
+```
 
+## 📱 Application Pages
+
+### Public Pages
+- **Homepage** (`/`) - Landing page with features overview
+- **Privacy Policy** (`/privacy`) - Data protection and user rights
+- **Terms of Service** (`/terms`) - User agreements and policies
+- **Safety Guidelines** (`/safety`) - Dating safety and community guidelines
+
+### Authenticated Pages
+- **Dashboard** (`/dashboard`) - Swipe through potential matches
+- **Matches** (`/matches`) - View mutual matches
+- **Messages** (`/messages`) - Chat interface with conversations
+- **Restaurants** (`/restaurants`) - Gluten-free restaurant discovery
+- **Verification** (`/verification`) - Account verification system
+- **Profile** (`/profile`) - User profile management
+
+## 🔐 Security & Privacy
+
+### Data Protection
+- **AES-256 encryption** for all sensitive data
+- **Field-level encryption** for PII and medical information
+- **End-to-end encryption** for messages
+- **Secure file storage** with access controls
+
+### Authentication & Authorization
+- **JWT tokens** with refresh token rotation
+- **Multi-factor authentication** support
+- **OAuth providers** (Google, Facebook)
+- **Session management** with secure cookies
+
+### Privacy Compliance
+- **GDPR compliant** - Right to access, rectify, delete
+- **CCPA compliant** - California privacy rights
+- **Data minimization** - Only collect necessary data
+- **Audit logging** - Complete activity tracking
+
+## 🧪 Testing
+
+### Test Framework
+- **Jest** - Unit and integration testing
+- **React Testing Library** - Component testing
+- **Playwright** - End-to-end testing
+- **MSW** - API mocking for tests
+
+### Quality Gates
+All code must pass:
+- ✅ **ESLint** with no errors
+- ✅ **Prettier** formatting
+- ✅ **TypeScript** type checking
+- ✅ **90%+ test coverage**
+- ✅ **Conventional commit** format
+
+### Running Tests
 ```bash
 # Run all tests
 npm test
@@ -132,221 +148,257 @@ npm run test:watch
 
 # Coverage report
 npm run test:coverage
+
+# End-to-end tests
+npm run test:e2e
 ```
 
-Every component has test files ready for implementation.
+## 📝 Git Workflow
 
-## 🔐 Security Design
+### Conventional Commits
+We enforce [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
 
-Security-first architecture with:
+```bash
+# Format: type(scope): description
+feat(auth): add two-factor authentication
+fix(ui): resolve mobile navigation issue
+docs(readme): update installation instructions
+test(auth): add unit tests for login flow
+```
 
-- **AES-256 encryption** for sensitive data
-- **JWT authentication** with refresh tokens
-- **Row-level security** in database
-- **Input validation** and sanitization
-- **GDPR compliance** built-in
-- **Audit logging** for all operations
+### Commit Types
+- **feat**: New features
+- **fix**: Bug fixes
+- **docs**: Documentation changes
+- **style**: Code style changes (formatting, etc.)
+- **refactor**: Code refactoring
+- **perf**: Performance improvements
+- **test**: Adding or updating tests
+- **build**: Build system changes
+- **ci**: CI/CD changes
+- **chore**: Maintenance tasks
+- **revert**: Reverting previous commits
 
-## 🎨 Design System
+### Git Hooks (Husky)
+Automated quality checks run on:
+- **Pre-commit**: ESLint + Prettier on staged files
+- **Commit-msg**: Conventional commit validation
+- **Pre-push**: Full linting, type checking, and tests
 
-Professional design system with:
+## 🐳 Docker Services
 
-- **Atomic Design** - Scalable component architecture
-- **Blue/Grey/White** theme - Professional and trustworthy
-- **Responsive design** - Mobile-first approach
-- **Accessibility** - WCAG 2.1 AA compliance ready
-- **Micro-interactions** - Smooth animations and transitions
-
-## 🚀 Ready to Implement
-
-This skeleton provides:
-
-1. **Complete frontend** - Fully functional with mock data
-2. **Infrastructure services** - All databases and services ready
-3. **Implementation roadmap** - FAANG-level project planning
-4. **Technical documentation** - Complete API and database design
-5. **Security framework** - Enterprise-grade security design
-6. **Testing foundation** - Comprehensive test stubs
-
-## 🎯 Implementation Priority
-
-Start with any of these based on your interests:
-
-1. **Authentication** - Implement real auth with Auth0/Supabase
-2. **Matching Algorithm** - Build the core matching logic
-3. **Real-time Messaging** - Add Socket.io for live chat
-4. **Restaurant Integration** - Connect Google Places API
-5. **Payment System** - Integrate Stripe for subscriptions
-
-Each service has clear interfaces and implementation guides.
-
-## 🐳 Docker Commands
-
+### Service Management
 ```bash
 # Start all services
-docker-compose up -d
+npm run services:up
+
+# View service status
+docker-compose ps
 
 # View logs
-docker-compose logs -f
+npm run services:logs
+
+# Reset all data
+npm run services:reset
 
 # Stop all services
-docker-compose down
-
-# Rebuild services
-docker-compose build
-
-# Production deployment
-docker-compose -f docker-compose.prod.yml up -d
+npm run services:down
 ```
 
-## 🗂️ Project Structure
+### Service Access
+- **Database**: `postgresql://gfd_user:gfd_password@localhost:5432/gfd_db`
+- **Redis**: `redis://localhost:6379` (password: `gfd_redis_password`)
+- **MinIO Console**: http://localhost:9001 (user: `gfd_minio_user`, pass: `gfd_minio_password`)
+- **MongoDB**: `mongodb://gfd_mongo_user:gfd_mongo_password@localhost:27017`
+- **Email Testing**: http://localhost:8025
+
+## 📊 Project Structure
 
 ```
-├── backend/
-│   ├── src/
-│   │   ├── schemas/        # GraphQL schemas
-│   │   ├── resolvers/      # GraphQL resolvers
-│   │   ├── services/       # Business logic
-│   │   ├── middleware/     # Custom middleware
-│   │   └── utils/          # Utility functions
-│   ├── prisma/
-│   │   ├── schema.prisma   # Database schema
-│   │   └── migrations/     # Database migrations
-│   └── Dockerfile          # Backend container
-├── frontend/
-│   └── src/
-│       ├── components/     # React components (Atomic Design)
-│       ├── hooks/         # Custom React hooks
-│       ├── utils/         # Utility functions
-│       ├── types/         # TypeScript type definitions
-│       └── graphql/       # GraphQL queries/mutations
-├── docs/                  # Documentation
-├── tests/                 # Test files
-├── nginx/                 # Nginx configuration
-├── database/              # Database initialization
-├── docker-compose.yml     # Local development
-├── docker-compose.prod.yml # Production deployment
-├── .env.local             # Local environment template
-└── .env.production        # Production environment template
+├── src/
+│   ├── components/         # React components (Atomic Design)
+│   │   ├── atoms/         # Basic UI elements
+│   │   ├── molecules/     # Simple combinations
+│   │   ├── organisms/     # Complex components
+│   │   ├── templates/     # Page layouts
+│   │   └── pages/         # Complete pages
+│   ├── hooks/             # Custom React hooks
+│   ├── services/          # Business logic and API clients
+│   ├── types/             # TypeScript type definitions
+│   ├── data/              # Mock data for development
+│   └── theme/             # Design system tokens
+├── docs/                  # Technical documentation
+├── services/              # Docker service configurations
+├── .husky/                # Git hooks
+└── supabase/              # Database migrations
 ```
 
-## 🚢 Production Deployment
+## 🎯 Implementation Status
 
-### Docker Swarm / Kubernetes
+### ✅ Complete
+- **Frontend application** - All pages and components
+- **Design system** - Atomic design with Tailwind CSS
+- **Test framework** - Jest with comprehensive test stubs
+- **Docker infrastructure** - All services containerized
+- **Documentation** - Complete technical guides
+- **Git workflow** - Husky hooks with conventional commits
 
-```bash
-# Build and deploy to production
-docker-compose -f docker-compose.prod.yml up -d
-```
+### ⚠️ Ready for Implementation
+- **Authentication service** - Interfaces defined, ready for Auth0/Supabase
+- **Database operations** - Schema designed, Prisma ready
+- **Real-time messaging** - Socket.io integration planned
+- **Payment processing** - Stripe integration designed
+- **File storage** - Encrypted upload system designed
+- **External APIs** - Google Places, verification services
 
-### Environment Setup
-1. Copy `.env.production` and configure all production values
-2. Set up managed databases (RDS, ElastiCache, etc.)
-3. Configure SSL certificates
-4. Set up monitoring and logging
-5. Configure backup strategies
-### Health Checks
-- Backend: `GET /health`
-- Database connectivity checks
-- Redis connectivity checks
-- File storage accessibility
+## 📚 Documentation
+
+### Implementation Guides
+- **`ROADMAP.md`** - FAANG-level project roadmap with milestones
+- **`IMPLEMENTATION_GUIDE.md`** - Step-by-step technical implementation
+- **`QUICKSTART.md`** - 30-second setup guide
+- **`SKELETON_GUIDE.md`** - Architecture and implementation strategy
+
+### Technical Documentation
+- **`docs/ARCHITECTURE.md`** - System architecture overview
+- **`docs/database.md`** - Database schema and optimization
+- **`docs/security.md`** - Security guidelines and compliance
+- **`docs/TESTING.md`** - Testing strategy and coverage
+- **`docs/DEPLOYMENT.md`** - Deployment and infrastructure
+- **`docs/CONTRIBUTING.md`** - Contribution guidelines and workflow
 
 ## 🔧 Configuration
 
 ### Environment Variables
-- **`.env.local`**: Local development settings
-- **`.env.production`**: Production configuration
-- **Docker environment**: Managed via docker-compose files
+Copy `.env.example` to `.env.local` and configure:
+
+```bash
+# Application
+VITE_TEST_MODE=true                    # Enable test mode features
+NODE_ENV=development
+
+# Supabase (for authentication)
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
+
+# Auth0 (for JWT experimentation)
+VITE_AUTH0_DOMAIN=your-domain.auth0.com
+VITE_AUTH0_CLIENT_ID=your_client_id
+
+# External APIs (when implementing)
+GOOGLE_PLACES_API_KEY=your_api_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_key
+```
 
 ### Feature Flags
+- `VITE_TEST_MODE`: Enable development test features
 - `ENABLE_BACKGROUND_CHECKS`: Background verification
-- `ENABLE_VIDEO_CALLS`: Video calling features  
+- `ENABLE_VIDEO_CALLS`: Video calling features
 - `ENABLE_AI_MODERATION`: AI content moderation
-- `ENABLE_ANALYTICS`: User analytics tracking
 
-## 🤖 AI Support Chat
+## 🚀 Deployment
 
-The application includes an intelligent support chat system:
+### Local Development
+```bash
+# Start all services and frontend
+npm run setup
+npm run dev
+```
 
-- **Context-aware responses** for common questions
-- **Safety and reporting** guidance
-- **Account management** assistance
-- **Gluten-free dining** recommendations
-- **Technical support** troubleshooting
-- **24/7 availability** with human escalation
+### Production Deployment
+```bash
+# Build and deploy with Docker
+docker-compose -f docker-compose.prod.yml up -d
+```
 
-## 📋 Legal Pages
-
-Comprehensive legal documentation included:
-
-- **Privacy Policy** (`/privacy`): Data protection and user rights
-- **Terms of Service** (`/terms`): User agreements and policies  
-- **Safety Guidelines** (`/safety`): Dating safety and community guidelines
-
-All pages are mobile-responsive and accessibility compliant.
+### Health Checks
+- **Frontend**: http://localhost:5173
+- **Backend**: http://localhost:4000/health (when implemented)
+- **Services Dashboard**: http://localhost:8080
 
 ## 🤝 Contributing
 
+We welcome contributions! Please read our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+
+### Quick Contribution Steps
 1. **Fork the repository**
-2. **Create a feature branch** using conventional naming:
-   ```bash
-   git checkout -b feat/user-verification
-   git checkout -b fix/login-error
-   git checkout -b docs/api-updates
-   ```
+2. **Create a feature branch**: `git checkout -b feat/amazing-feature`
 3. **Make your changes** following our coding standards
 4. **Write tests** for new functionality
-5. **Commit using conventional format**:
-   ```bash
-   git commit -m "feat(auth): add two-factor authentication"
-   git commit -m "fix(ui): resolve mobile navigation issue"
-   ```
-6. **Push your branch** (pre-push hooks will run automatically)
-7. **Submit a pull request** with detailed description
+5. **Commit using conventional format**: `git commit -m "feat(auth): add OAuth integration"`
+6. **Push your branch**: `git push origin feat/amazing-feature`
+7. **Submit a pull request**
 
-### Commit Message Format
-We enforce [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+### Quality Requirements
+- ✅ All tests pass (`npm test`)
+- ✅ Linting passes (`npm run lint`)
+- ✅ Type checking passes (`npm run typecheck`)
+- ✅ Conventional commit format
+- ✅ Code review approval
 
-```
-<type>[optional scope]: <description>
+## 📈 Performance
 
-[optional body]
+### Optimization Features
+- **Code splitting** - Lazy loading for optimal performance
+- **Image optimization** - WebP format with lazy loading
+- **Bundle optimization** - Tree shaking and minification
+- **Caching strategies** - Multi-layer caching system
+- **Database optimization** - Query optimization and indexing
 
-[optional footer(s)]
-```
+### Performance Targets
+- **First Contentful Paint**: <1.5s
+- **Largest Contentful Paint**: <2.5s
+- **Cumulative Layout Shift**: <0.1
+- **First Input Delay**: <100ms
 
-**Examples:**
-- `feat(auth): add OAuth2 Google integration`
-- `fix(ui): resolve mobile navigation overflow`
-- `docs(readme): update installation instructions`
-- `test(auth): add unit tests for login flow`
+## 🛡️ Security
 
-### Git Hooks
-Automated quality checks run on:
-- **Pre-commit**: Linting and formatting
-- **Commit-msg**: Conventional commit validation
-- **Pre-push**: Linting, type checking, and tests
-## 📊 Performance
+### Security Features
+- **Input validation** - All user inputs sanitized
+- **SQL injection prevention** - Parameterized queries
+- **XSS protection** - Content Security Policy
+- **CSRF protection** - Token-based validation
+- **Rate limiting** - API endpoint protection
 
-- **Core Web Vitals** optimized
-- **Code Splitting** for optimal loading
-- **Image Optimization** with lazy loading
-- **Caching Strategies** at multiple levels
-- **Database Query Optimization**
+### Compliance
+- **OWASP Top 10** - Security best practices
+- **GDPR** - European privacy regulation
+- **CCPA** - California privacy rights
+- **SOC 2** - Security and availability standards
+
+## 📞 Support
+
+### Getting Help
+- **Documentation**: Check the `/docs` folder first
+- **Issues**: Create a GitHub issue for bugs
+- **Discussions**: Use GitHub Discussions for questions
+- **Security**: Email security@gfd.com for security issues
+
+### Development Support
+- **Implementation Guide**: `IMPLEMENTATION_GUIDE.md`
+- **Architecture Guide**: `docs/ARCHITECTURE.md`
+- **API Documentation**: `docs/api.md`
+- **Database Guide**: `docs/database.md`
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## 🙏 Acknowledgments
 
-- **Documentation**: Check the `/docs` folder
-- **Implementation Guide**: `IMPLEMENTATION_GUIDE.md`
-- **Roadmap**: `ROADMAP.md`
-- **Architecture**: `docs/ARCHITECTURE.md`
+- **Gluten-free community** - For inspiring this platform
+- **Open source contributors** - For making this possible
+- **Security researchers** - For keeping our users safe
 
 ---
 
 **🌾 Ready to build the future of gluten-free dating!**
 
-This skeleton gives you everything you need to build a production-ready dating platform with enterprise-grade architecture and security. Start implementing any service and watch your vision come to life! 💙
+This platform provides everything needed to create a secure, scalable dating platform with enterprise-grade architecture. Start implementing any service and watch your vision come to life! 💙
+
+### Quick Links
+- 📖 [Implementation Guide](IMPLEMENTATION_GUIDE.md)
+- 🗺️ [Project Roadmap](ROADMAP.md)
+- 🚀 [Quick Start Guide](QUICKSTART.md)
+- 🤝 [Contributing Guidelines](docs/CONTRIBUTING.md)
+- 🏗️ [Architecture Documentation](docs/ARCHITECTURE.md)
