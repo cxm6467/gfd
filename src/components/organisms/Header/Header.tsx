@@ -1,8 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { TestModeBanner } from '../../molecules/TestModeBanner';
+import { Logo } from '../../atoms/Logo';
 
-const Header = ({ theme }) => {
+export const Header = ({ theme }) => {
   const location = useLocation();
   
   const toggleTestMode = (enabled) => {
@@ -46,4 +48,3 @@ const Header = ({ theme }) => {
         </div>
     </header>
   );
-};
