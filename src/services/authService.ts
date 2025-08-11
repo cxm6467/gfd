@@ -132,8 +132,12 @@ export class AuthService {
 
   // Quick sign in for test mode
   async quickSignIn(): Promise<{ user: User; tokens: AuthTokens }> {
-    // Only allow in test mode
-    if (import.meta.env.VITE_TEST_MODE !== 'true') {
+    // Check if test mode is enabled (either via localStorage or environment)
+    const testModeFromStorage = localStorage.getItem('VITE_TEST_MODE');
+    const testModeFromEnv = import.meta.env.VITE_TEST_MODE;
+    const isTestModeEnabled = testModeFromStorage === 'true' || testModeFromEnv === 'true';
+    
+    if (!isTestModeEnabled) {
       throw new Error('Quick sign in only available in test mode');
     }
     
