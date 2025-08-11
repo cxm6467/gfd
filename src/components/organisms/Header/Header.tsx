@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo } from '../../atoms/Logo';
 import { TestModeToggle } from '../../molecules/TestModeToggle';
@@ -11,11 +11,17 @@ export const Header: React.FC = () => {
   
   const [isTestMode, setIsTestMode] = useState(() => {
     const stored = localStorage.getItem('VITE_TEST_MODE');
-    return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE !== 'false';
+    return stored ? stored === 'true' : true; // Default to true for development
   });
+
+  // Force test mode to true for development
+  useEffect(() => {
+    setIsTestMode(true);
+  }, []);
 
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
+    localStorage.setItem('VITE_TEST_MODE', enabled.toString());
   };
 
   const navItems = [
@@ -29,13 +35,13 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {/* Test Mode Banner - Only show when VITE_TEST_MODE is true */}
+      {/* Test Mode Banner - Always show in development */}
       {isTestMode && (
         <div className="bg-red-600 text-white px-4 py-3 text-center text-sm font-medium">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span>🧪</span>
-              <span>Test Mode - Development Environment</span>
+              <span>Test Mode Active - Development Environment</span>
             </div>
             <TestModeToggle isTestMode={isTestMode} onToggle={handleTestModeToggle} />
           </div>

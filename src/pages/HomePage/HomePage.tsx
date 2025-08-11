@@ -15,11 +15,12 @@ export const HomePage: React.FC = () => {
   
   const [isTestMode, setIsTestMode] = useState(() => {
     const stored = localStorage.getItem('VITE_TEST_MODE');
-    return stored ? stored === 'true' : import.meta.env.VITE_TEST_MODE !== 'false';
+    return stored ? stored === 'true' : true; // Default to true for development
   });
 
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
+    localStorage.setItem('VITE_TEST_MODE', enabled.toString());
   };
 
   const handleQuickSignIn = async () => {
@@ -49,7 +50,7 @@ export const HomePage: React.FC = () => {
             <Logo size="md" />
             
             <div className="flex items-center space-x-4">
-              {isTestMode && import.meta.env.VITE_TEST_MODE === 'true' ? (
+              {isTestMode ? (
                 <Button onClick={handleQuickSignIn}>
                   Quick Sign In (Test)
                 </Button>
@@ -190,7 +191,6 @@ export const HomePage: React.FC = () => {
             the importance of shared values and lifestyle choices.
           </p>
           <Button 
-            onClick={() => setShowAuthModal(true)}
             onClick={() => navigate('/profile')}
             variant="secondary"
             size="lg"

@@ -8,14 +8,8 @@ interface TestModeToggleProps {
 export const TestModeToggle: React.FC<TestModeToggleProps> = ({ isTestMode, onToggle }) => {
   const [isToggling, setIsToggling] = useState(false);
 
-
   const handleToggle = () => {
     if (isToggling) return; // Prevent multiple clicks during animation
-    
-    // Only allow toggle if VITE_TEST_MODE is enabled
-    if (import.meta.env.VITE_TEST_MODE !== 'true') {
-      return;
-    }
     
     setIsToggling(true);
     const newState = !isTestMode;
