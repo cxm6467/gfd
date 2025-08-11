@@ -75,7 +75,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
           const result = await matchService.addLike(user.id, currentProfile);
           if (result.isMatch) {
             // Show match notification
-            console.log(`🎉 It's a match with ${currentProfile.name}!`);
+            alert(`🎉 It's a match with ${currentProfile.name}! Check your Matches tab.`);
             // TODO: Replace with proper match notification UI
           }
         } catch (error) {

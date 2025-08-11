@@ -1,42 +1,29 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { AppLayout } from '../../components/templates/AppLayout';
 import { MatchCard } from '../../components/molecules/MatchCard';
 import { Button } from '../../components/atoms/Button';
-import { MatchService } from '../../services/matchService';
-import { useAuth } from '../../hooks/useAuth';
-import { Match } from '../../types';
+import { mockMatches } from '../../data/mockData';
+import { useMatchesStorage } from '../../hooks/useSessionStorage';
 import { useTheme } from '../../hooks/useTheme';
 
 export const MatchesPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { user } = useAuth();
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [loading, setLoading] = useState(true);
-  const matchService = MatchService.getInstance();
+  const { matches } = useMatchesStorage();
 
-  useEffect(() => {
-    loadMatches();
-  }, [user]);
-
-  const loadMatches = async () => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const userMatches = await matchService.getMatches(user.id);
-      setMatches(userMatches);
-    } catch (error) {
-      console.error('Error loading matches:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Convert session storage matches to display format
+  const displayMatches = matches.map(match => ({
+    id: match.profile?.id || match.id,
+    name: match.profile?.name || 'Unknown',
+    lastMessage: match.lastMessage || "You matched! Say hello 👋",
+    time: match.matchedAt ? new Date(match.matchedAt).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }) : 'Just now',
+    emoji: match.profile?.emoji || '👤'
+  }));
 
   return (
     <AppLayout>
@@ -45,14 +32,9 @@ export const MatchesPage: React.FC = () => {
           Your Matches
         </h1>
         
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className={theme.colors.textSecondary}>Loading your matches...</p>
-          </div>
-        ) : matches.length > 0 ? (
+        {displayMatches.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {matches.map((match) => (
+            {displayMatches.map((match) => (
               <MatchCard
                 key={match.id}
                 match={match}
@@ -72,6 +54,16 @@ export const MatchesPage: React.FC = () => {
             <Button onClick={() => navigate('/dashboard')}>
               Discover People
             </Button>
+          </div>
+        )}
+
+        {/* Debug Info */}
+        {import.meta.env.DEV && (
+          <div className="mt-8 p-4 bg-gray-100 rounded-lg">
+            <h3 className="font-medium mb-2">Debug Info:</h3>
+            <p className="text-sm text-gray-600">
+              Session matches: {matches.length} | Display matches: {displayMatches.length}
+            </p>
           </div>
         )}
       </div>

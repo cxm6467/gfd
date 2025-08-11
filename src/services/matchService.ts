@@ -24,6 +24,9 @@ export class MatchService {
   async addLike(currentUserId: string, likedProfile: User): Promise<{ isMatch: boolean; matchId?: string }> {
     console.log('Adding like:', currentUserId, 'likes', likedProfile.id);
     
+    // For demo purposes, simulate that some profiles like you back (50% chance)
+    const isLikedBack = Math.random() > 0.5;
+    
     // Get existing likes from session storage
     const existingLikes = this.getLikes();
     
@@ -35,46 +38,33 @@ export class MatchService {
       id: `like_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       userId: currentUserId,
       likedUserId: likedProfile.id.toString(),
-      isMatch: false,
+      isMatch: isLikedBack,
       createdAt: new Date()
     };
 
-    // Check if the other user already liked us (mutual match)
-    const mutualLike = existingLikes.find(like => 
-      like.userId === likedProfile.id.toString() && 
-      like.likedUserId === currentUserId
-    );
+    // Save the like
+    existingLikes.push(newLike);
+    this.saveLikes(existingLikes);
 
-    if (mutualLike) {
-      // It's a match! Update both likes
-      newLike.isMatch = true;
-      mutualLike.isMatch = true;
-      
-      // Save updated likes
-      const updatedLikes = existingLikes.map(like => 
-        like.id === mutualLike.id ? mutualLike : like
-      );
-      updatedLikes.push(newLike);
-      this.saveLikes(updatedLikes);
+    if (isLikedBack) {
+      // It's a match! Add to matches
+      console.log(`🎉 It's a match with ${likedProfile.name}!`);
 
-      // Add to matches
       await this.addMatch(currentUserId, likedProfile);
       
       // Save match to session storage
       this.storageService.addMatch({
-        id: newLike.id,
+        id: `match_${Date.now()}`,
         userId: currentUserId,
         matchedUserId: likedProfile.id.toString(),
         profile: likedProfile,
-        matchedAt: new Date().toISOString()
+        matchedAt: new Date().toISOString(),
+        lastMessage: "You matched! Say hello 👋"
       });
       
       return { isMatch: true, matchId: newLike.id };
     } else {
-      // Just a like, not a match yet
-      existingLikes.push(newLike);
-      this.saveLikes(existingLikes);
-      
+      console.log(`👍 Liked ${likedProfile.name}, waiting for them to like back...`);
       return { isMatch: false };
     }
   }
