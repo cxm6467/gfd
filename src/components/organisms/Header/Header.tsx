@@ -1,6 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+const Header = ({ theme }) => {
+  const location = useLocation();
+  
+  const toggleTestMode = (enabled) => {
     localStorage.setItem('VITE_TEST_MODE', enabled.toString());
   };
 
@@ -38,5 +43,7 @@ import { Link, useLocation } from 'react-router-dom';
 
             {/* Mobile Navigation - Bottom Tab Bar will be added later */}
           </div>
+        </div>
     </header>
+  );
 };
