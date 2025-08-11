@@ -4,15 +4,17 @@ export const useToast = () => {
   const [toast, setToast] = useState<{
     message: string;
     isVisible: boolean;
+    onClick?: () => void;
   }>({
     message: '',
     isVisible: false,
   });
 
-  const showToast = (message: string) => {
+  const showToast = (message: string, onClick?: () => void) => {
     setToast({
       message,
       isVisible: true,
+      onClick,
     });
   };
 

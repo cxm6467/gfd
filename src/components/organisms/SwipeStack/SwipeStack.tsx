@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User } from '../../../types';
 import { ProfileCard } from '../../molecules/ProfileCard';
 import { Button } from '../../atoms/Button';
@@ -17,6 +18,7 @@ interface SwipeStackProps {
 }
 
 export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass }) => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const matchService = MatchService.getInstance();
   const storageService = StorageService.getInstance();
@@ -77,7 +79,10 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
         try {
           const result = await matchService.addLike(user.id, currentProfile);
           if (result.isMatch) {
-            showToast(`🎉 It's a match with ${currentProfile.name}! Check your Matches tab.`);
+            showToast(
+              `🎉 It's a match with ${currentProfile.name}! Click to view matches.`,
+              () => navigate('/matches')
+            );
           }
         } catch (error) {
           console.error('Error adding like:', error);
@@ -215,6 +220,7 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
         message={toast.message}
         isVisible={toast.isVisible}
         onClose={hideToast}
+        onClick={toast.onClick}
       />
     </div>
   );
