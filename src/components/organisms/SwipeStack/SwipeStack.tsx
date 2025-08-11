@@ -134,6 +134,24 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
   const currentProfile = activeProfiles[currentIndex];
   const nextProfile = activeProfiles[currentIndex + 1];
 
+  // Safety check: if no current profile, show empty state
+  if (!currentProfile) {
+    return (
+      <div className="text-center py-12">
+        <div className="space-y-4">
+          <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+            <Heart className="w-8 h-8 text-gray-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">You've seen everyone!</h3>
+          <p className="text-gray-500 mb-6">Check back later for new profiles, or review the ones you've seen.</p>
+          <Button onClick={handleReset} variant="outline">
+            Show Profiles Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       {/* Profile Stack */}
@@ -163,12 +181,14 @@ export const SwipeStack: React.FC<SwipeStackProps> = ({ profiles, onLike, onPass
       <div className="flex justify-center space-x-6">
         <button
           onClick={handlePass}
+          disabled={!currentProfile}
           className="w-16 h-16 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center hover:bg-slate-200 transition-all shadow-lg hover:shadow-xl"
         >
           <X className="w-8 h-8" />
         </button>
         <button
           onClick={handleLike}
+          disabled={!currentProfile}
           className="w-16 h-16 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl"
         >
           <Heart className="w-8 h-8 fill-current" />
