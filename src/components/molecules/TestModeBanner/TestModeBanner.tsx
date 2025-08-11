@@ -10,8 +10,6 @@ export const TestModeBanner: React.FC = () => {
   const handleTestModeToggle = (enabled: boolean) => {
     setIsTestMode(enabled);
     localStorage.setItem('VITE_TEST_MODE', enabled.toString());
-    // Force page reload to apply test mode changes
-    window.location.reload();
   };
 
   // Always show banner in development
